@@ -15,4 +15,8 @@ public interface RecruitRepository {
     List<DasomApplicant> getApplicantList();
 
     DasomApplicant getApplicantByStudentNo(int studentNo);
+
+    void updateApplicantInfo(DasomApplicant dasomApplicant);
+
+    void deleteApplicantByStudentNo(int studentNo);
 }

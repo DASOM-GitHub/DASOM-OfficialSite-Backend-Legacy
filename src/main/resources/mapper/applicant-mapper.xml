@@ -16,5 +16,15 @@
     <select id="getApplicantByStudentNo" resultType="DasomApplicant">
         SELECT * FROM dasom_applicant WHERE ac_student_no = #{studentNo}
     </select>
+    
+    <update id="updateApplicantInfo" parameterType="DasomApplicant">
+        UPDATE dasom_applicant SET ac_name = #{acName}, ac_contact = #{acContact}, ac_email = #{acEmail}, ac_department = #{acDepartment},
+                                   ac_grade = #{acGrade}, reason_for_apply = #{reasonForApply}, rec_no = #{recNo}
+        WHERE ac_student_no = #{acStudentNo}
+    </update>
+
+    <delete id="deleteApplicantByStudentNo" parameterType="int">
+        DELETE FROM dasom_applicant WHERE ac_student_no = #{acStudentNo}
+    </delete>
 
 </mapper>
