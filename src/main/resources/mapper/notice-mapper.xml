@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.NoticeRepository">
+
+    <select id="findNoticeDateDesc" resultType="Notice">
+        SELECT * FROM notice_table ORDER BY notice_register_date DESC;
+    </select>
+
+    <select id="findNoticeTitle" resultType="Notice">
+        SELECT * FROM notice_table WHERE notice_title LIKE CONCAT('%', #{noticeTitle}, '%') ORDER BY notice_register_date DESC;
+    </select>
+
+</mapper>
