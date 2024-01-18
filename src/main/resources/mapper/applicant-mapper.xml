@@ -27,4 +27,9 @@
         DELETE FROM dasom_applicant WHERE ac_student_no = #{acStudentNo}
     </delete>
 
+    <select id="getUserByUniqueCode" parameterType="hashmap" resultType="DasomNewMember">
+        SELECT * FROM dasom_new_member
+        WHERE unique_code = #{uniqueCode}
+    </select>
+
 </mapper>
