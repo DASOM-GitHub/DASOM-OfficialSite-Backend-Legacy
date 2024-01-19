@@ -1,9 +1,8 @@
 package dmu.dasom.dasom_homepage.controller.notice;
 
-import ch.qos.logback.core.model.Model;
-import dmu.dasom.dasom_homepage.domain.notice.Notice;
+import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
+import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.service.notice.NoticeService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +21,17 @@ public class NoticeController {
     public NoticeController(NoticeService noticeService) { this.noticeService = noticeService; }
 
     @GetMapping("/list")
-    public List<Notice> findNoticeAll() {
+    public List<NoticeList> findNoticeAll() {
         return noticeService.findNoticeDateDesc();
     }
 
     @GetMapping("/search")
-    public List<Notice> findNoticeTitle(@RequestParam(value = "title") String noticeTitle) {
+    public List<NoticeList> findNoticeTitle(@RequestParam(value = "title") String noticeTitle) {
         return noticeService.findNoticeTitle(noticeTitle);
+    }
+
+    @GetMapping("/list/detail")
+    public NoticeDetailList detailPage(@RequestParam(value="pageNo") int noticeNo) {
+        return noticeService.detailNoticePage(noticeNo);
     }
 }

@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter @Setter
 @NoArgsConstructor
-public class Notice {
+public class NoticeList {
     private int noticeNo;
-    private int writerNo;
+    private String memName;
     private String noticeTitle;
-    private String noticeContent;
-    private String noticePic;
+    private LocalDateTime noticeRegisterDate;
 }

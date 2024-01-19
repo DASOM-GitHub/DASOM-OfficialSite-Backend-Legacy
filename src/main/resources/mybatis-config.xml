@@ -11,7 +11,8 @@
 
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomNewMember" alias="DasomNewMember"/>
 
-        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.Notice" alias="Notice"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeList" alias="NoticeList"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList" alias="NoticeDetailList"/>
 
     </typeAliases>
     <mappers>
