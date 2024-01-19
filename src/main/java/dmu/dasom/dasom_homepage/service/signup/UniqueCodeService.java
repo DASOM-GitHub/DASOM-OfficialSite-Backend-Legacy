@@ -2,17 +2,15 @@ package dmu.dasom.dasom_homepage.service.signup;
 
 import dmu.dasom.dasom_homepage.domain.member.DasomNewMember;
 import dmu.dasom.dasom_homepage.repository.RecruitRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 
 @Service
-public class UserService {
+public class UniqueCodeService {
     private final RecruitRepository recruitRepository;
-    public UserService(RecruitRepository recruitRepository) {
+    public UniqueCodeService(RecruitRepository recruitRepository) {
         this.recruitRepository = recruitRepository;
     }
 

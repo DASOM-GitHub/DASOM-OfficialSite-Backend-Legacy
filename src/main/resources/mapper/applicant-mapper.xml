@@ -32,4 +32,9 @@
         WHERE unique_code = #{uniqueCode}
     </select>
 
+    <insert id="insertUser" parameterType="DasomMember" >
+        INSERT INTO member_table(mem_email, mem_password, mem_name, mem_grade, mem_department , mem_rec_no )
+        VALUES (#{email}, #{password}, #{name}, #{grade}, #{major}, #{recno} )
+    </insert>
+
 </mapper>

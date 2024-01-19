@@ -1,9 +1,9 @@
 package dmu.dasom.dasom_homepage.repository;
 
+import dmu.dasom.dasom_homepage.domain.member.DasomMember;
 import dmu.dasom.dasom_homepage.domain.member.DasomNewMember;
 import dmu.dasom.dasom_homepage.domain.recruit.DasomApplicant;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +23,6 @@ public interface RecruitRepository {
     void deleteApplicantByStudentNo(int studentNo);
 
     DasomNewMember getUserByUniqueCode(Map<String, Object> uniqueCode);
+
+    void insertUser(DasomMember dasomMember);
 }
