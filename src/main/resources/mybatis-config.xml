@@ -10,6 +10,7 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.recruit.DasomApplicant" alias="DasomApplicant"/>
 
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomNewMember" alias="DasomNewMember"/>
+        <typeAlias type="dmu/dasom/dasom_homepage/domain/admin/MemberState" alias="MemberState"/>
     </typeAliases>
     <mappers>
         <mapper class="dmu.dasom.dasom_homepage.repository.RecruitRepository" />

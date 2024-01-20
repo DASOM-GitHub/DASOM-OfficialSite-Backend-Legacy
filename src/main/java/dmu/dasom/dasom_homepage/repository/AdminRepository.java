@@ -10,4 +10,8 @@ public interface AdminRepository {
     void deleteMember(MemberState memberState);
 
     void modifyMember(MemberState memberState);
+
+    void stateChange(MemberState memberState);
+
+
 }
