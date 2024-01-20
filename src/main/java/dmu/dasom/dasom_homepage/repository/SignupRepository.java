@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface MemberRepository {
+public interface SignupRepository {
+    Boolean isNewMemberExistByCode(String uniqueCode);
 
-    DasomMember getMemberByEmail(String memEmail);
+    Boolean existByEmail(String memEmail);
 
+    void saveNewMember(DasomMember dasomMember);
 }

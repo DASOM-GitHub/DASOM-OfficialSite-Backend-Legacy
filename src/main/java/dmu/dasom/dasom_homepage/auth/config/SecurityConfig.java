@@ -78,7 +78,7 @@ public class SecurityConfig {
         // 경로별 권한 인가
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/signup", "/login").permitAll()
+                        .requestMatchers("/", "/signup/*", "/login").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my-page").hasAnyRole("ADMIN", "MEMBER")
                         .anyRequest().authenticated());

@@ -21,8 +21,4 @@ public interface RecruitRepository {
     void updateApplicantInfo(DasomApplicant dasomApplicant);
 
     void deleteApplicantByStudentNo(int studentNo);
-
-    DasomNewMember getUserByUniqueCode(Map<String, Object> uniqueCode);
-
-    void insertUser(DasomMember dasomMember);
 }

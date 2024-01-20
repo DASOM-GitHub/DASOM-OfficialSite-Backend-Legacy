@@ -27,14 +27,4 @@
         DELETE FROM dasom_applicant WHERE ac_student_no = #{acStudentNo}
     </delete>
 
-    <select id="getUserByUniqueCode" parameterType="hashmap" resultType="DasomNewMember">
-        SELECT * FROM dasom_new_member
-        WHERE unique_code = #{uniqueCode}
-    </select>
-
-    <insert id="insertUser" parameterType="DasomMember" >
-        INSERT INTO member_table(mem_email, mem_password, mem_name, mem_grade, mem_department , mem_rec_no )
-        VALUES (#{email}, #{password}, #{name}, #{grade}, #{major}, #{recno} )
-    </insert>
-
 </mapper>
