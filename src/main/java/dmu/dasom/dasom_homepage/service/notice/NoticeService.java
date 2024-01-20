@@ -1,5 +1,6 @@
 package dmu.dasom.dasom_homepage.service.notice;
 
+import dmu.dasom.dasom_homepage.domain.notice.NoticeCreate;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
@@ -24,5 +25,11 @@ public class NoticeService {
     // 상세 페이지
     public NoticeDetailList detailNoticePage(int noticeNo) {
         return noticeRepository.detailNoticePage(noticeNo);
+    }
+
+    // notice 등록
+    public String noticeCreate(NoticeCreate create) {
+        noticeRepository.noticeCreate(create);
+        return "등록 완료";
     }
 }
