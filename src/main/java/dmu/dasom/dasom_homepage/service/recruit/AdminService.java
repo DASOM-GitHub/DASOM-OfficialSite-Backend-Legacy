@@ -14,12 +14,20 @@ public class AdminService {
         this.adminRepository = adminRepository;
     }
 
-    public void delete(MemberState memberState) {
+    public String delete(MemberState memberState) {
         //memberState.getNo; // 나중에 만들어질 member_table의 pk값
         memberState.setMemNo(1);
         adminRepository.deleteMember(memberState);
+        return "회원 삭제 성공";
     }
-    public void modify(MemberState memberState) {
+    public String modify(MemberState memberState) {
         adminRepository.modifyMember(memberState);
+        return "회원 수정 성공";
+
+    }
+
+    public String stateChange(MemberState memberState) {
+        adminRepository.stateChange(memberState);
+        return "회원 상태 변경 성공";
     }
 }
