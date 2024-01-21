@@ -3,6 +3,7 @@ package dmu.dasom.dasom_homepage.repository;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeCreate;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
+import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,8 @@ public interface NoticeRepository{
     List<NoticeList> findNoticeTitle(String noticeTitle);
     NoticeDetailList detailNoticePage(int noticeNo);
     NoticeCreate noticeCreate(NoticeCreate noticeCreate);
+
+    void updateNotice(NoticeTable noticeTable);
+
+    NoticeTable isExistsNotice(String noticeNo);
 }

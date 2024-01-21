@@ -14,4 +14,17 @@
         SELECT n.notice_title, m.mem_name, n.notice_content, n.notice_pic FROM notice_table n JOIN member_table m ON n.writer_no = m.mem_no WHERE notice_no = #{noticeNo};
     </select>
 
+    <update id="updateNotice" parameterType="NoticeTable">
+        update notice_table
+        set writer_no = #{writerNo}, notice_title = #{noticeTitle}, notice_content = #{noticeContent},
+            notice_pic = #{noticePic}, notice_register_date = CURRENT_TIMESTAMP
+        where notice_no = #{noticeNo};
+    </update>
+
+    <select id="isExistsNotice" parameterType="String" resultType="NoticeTable">
+        select *
+        from notice_table
+        where notice_no = #{noticeNo};
+    </select>
+
 </mapper>

@@ -14,6 +14,7 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeList" alias="NoticeList"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList" alias="NoticeDetailList"/>
 
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeTable" alias="NoticeTable" />
     </typeAliases>
     <mappers>
         <mapper class="dmu.dasom.dasom_homepage.repository.RecruitRepository" />

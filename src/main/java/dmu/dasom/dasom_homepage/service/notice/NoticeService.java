@@ -3,10 +3,12 @@ package dmu.dasom.dasom_homepage.service.notice;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeCreate;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
+import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoticeService {
@@ -31,5 +33,18 @@ public class NoticeService {
     public String noticeCreate(NoticeCreate create) {
         noticeRepository.noticeCreate(create);
         return "등록 완료";
+    }
+
+    public String updateNotice(NoticeTable noticeTable){
+        if(!isExistsNotice(noticeTable.getNoticeNo()))
+            return "해당 게시물은 존재하지 않습니다";
+
+        noticeRepository.updateNotice(noticeTable);
+        return "게시물 수정이 완료되었습니다";
+    }
+
+    public Boolean isExistsNotice(String noticeNo){
+        Optional<NoticeTable> notice = Optional.ofNullable(noticeRepository.isExistsNotice(noticeNo));
+        return notice.isPresent();
     }
 }
