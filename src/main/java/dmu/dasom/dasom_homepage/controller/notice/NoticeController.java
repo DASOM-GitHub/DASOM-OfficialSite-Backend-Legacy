@@ -1,10 +1,8 @@
 package dmu.dasom.dasom_homepage.controller.notice;
 
-import dmu.dasom.dasom_homepage.domain.notice.NoticeCreate;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
-import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import dmu.dasom.dasom_homepage.service.notice.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,8 +34,9 @@ public class NoticeController {
     }
 
     @GetMapping("/create")
-    public String noticeCreate(NoticeCreate create){
-        return noticeService.noticeCreate(create);
+    public String createNotice(NoticeTable noticeTable){
+        System.out.println("테스트 ");
+        return noticeService.createNotice(noticeTable);
     }
 
     @GetMapping("/update")

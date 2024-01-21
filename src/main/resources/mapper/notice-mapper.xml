@@ -14,6 +14,11 @@
         SELECT n.notice_title, m.mem_name, n.notice_content, n.notice_pic FROM notice_table n JOIN member_table m ON n.writer_no = m.mem_no WHERE notice_no = #{noticeNo};
     </select>
 
+    <insert id="createNotice" parameterType="NoticeTable">
+        INSERT INTO notice_table (notice_no, writer_no, notice_title, notice_content, notice_pic)
+        VALUES (#{notice_no}, #{writer_no}, #{notice_title}, #{notice_content}, #{notice_pic})
+    </insert>
+
     <update id="updateNotice" parameterType="NoticeTable">
         update notice_table
         set writer_no = #{writerNo}, notice_title = #{noticeTitle}, notice_content = #{noticeContent},
