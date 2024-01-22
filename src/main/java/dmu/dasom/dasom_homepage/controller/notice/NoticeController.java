@@ -50,4 +50,7 @@ public class NoticeController {
     public String deleteNotice(@RequestParam(value="pageNo") int noticeNo){
         return noticeService.deleteNotice(noticeNo);
     }
+
 }
+
+
