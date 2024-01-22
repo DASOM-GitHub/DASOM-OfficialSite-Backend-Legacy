@@ -1,7 +1,9 @@
 package dmu.dasom.dasom_homepage.auth.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.dasom.dasom_homepage.auth.jwt.JwtUtil;
 import dmu.dasom.dasom_homepage.auth.userdetails.CustomUserDetails;
+import dmu.dasom.dasom_homepage.domain.login.LoginDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,15 +32,23 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        // 클라이언트로부터 온 요청에서 username, password 파라미터 추출
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        try {
+            // 로그인 데이터를 객체화 시킴
+            ObjectMapper objectMapper = new ObjectMapper();
+            LoginDTO loginDTO = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
 
-        // 검증을 위해 token으로 만듦
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+            // 클라이언트로부터 온 요청에서 username, password 파라미터 추출
+            String username = loginDTO.getUsername();
+            String password = loginDTO.getPassword();
 
-        // token 검증을 위해 AuthenticationManager로 전달
-        return authenticationManager.authenticate(authToken);
+            // 검증을 위해 token으로 만듦
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+
+            // token 검증을 위해 AuthenticationManager로 전달
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // 로그인 성공 핸들러

@@ -1,12 +1,11 @@
 package dmu.dasom.dasom_homepage.controller.signup;
 
 import dmu.dasom.dasom_homepage.domain.member.DasomMember;
+import dmu.dasom.dasom_homepage.domain.member.DasomNewMember;
 import dmu.dasom.dasom_homepage.service.signup.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/signup")
@@ -20,11 +19,11 @@ public class SignupController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Object> verifyNewMember(@RequestBody Map<String, Object> paramMap) {
-        System.out.println("uniqueCode ==> " + paramMap);
+    public ResponseEntity<Object> verifyNewMember(@RequestBody DasomNewMember verifyReq) {
+        System.out.println("uniqueCode ==> " + verifyReq.toString());
 
         // 인증 여부 확인
-        boolean isAuthenticated = signupService.verifyNewMember(paramMap.get("uniqueCode").toString());
+        boolean isAuthenticated = signupService.verifyNewMember(verifyReq.getUniqueCode());
 
         if (isAuthenticated) {
             return ResponseEntity.ok("부원 인증 성공");
@@ -35,8 +34,11 @@ public class SignupController {
 
     // 회원가입 프로세스 테스트 용
     @PostMapping()
-    public ResponseEntity<String> signupProc(DasomMember newMember) {
-        System.out.println("newMember => " + newMember);
+    public ResponseEntity<String> signupProc(@RequestBody DasomMember newMember) {
+        // 기수 수동 삽입 (테스트)
+        newMember.setMemRecNo(32);
+
+        System.out.println("newMember => " + newMember.toString());
         if (signupService.saveNewMember(newMember))
             return ResponseEntity.ok("부원 가입 성공");
         else
