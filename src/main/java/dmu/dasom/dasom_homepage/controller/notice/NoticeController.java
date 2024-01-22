@@ -46,7 +46,7 @@ public class NoticeController {
         return noticeService.updateNotice(noticeTable);
     }
     // notice 삭제
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     public String deleteNotice(@RequestParam(value="pageNo") int noticeNo){
         return noticeService.deleteNotice(noticeNo);
     }
