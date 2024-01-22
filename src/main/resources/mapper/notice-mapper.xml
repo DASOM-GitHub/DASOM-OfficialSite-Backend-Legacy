@@ -32,4 +32,7 @@
         where notice_no = #{noticeNo};
     </select>
 
+    <delete id="deleteNotice" parameterType="int">
+        DELETE FROM notice_table WHERE notice_no = #{noticeNo}
+    </delete>
 </mapper>

@@ -33,7 +33,7 @@ public class NoticeService {
         noticeRepository.createNotice(noticeTable);
         return "등록 완료";
     }
-
+    // notice 수정
     public String updateNotice(NoticeTable noticeTable){
         if(!isExistsNotice(noticeTable.getNoticeNo()))
             return "해당 게시물은 존재하지 않습니다";
@@ -45,5 +45,12 @@ public class NoticeService {
     public Boolean isExistsNotice(String noticeNo){
         Optional<NoticeTable> notice = Optional.ofNullable(noticeRepository.isExistsNotice(noticeNo));
         return notice.isPresent();
+    }
+    // notice 삭제
+    public String deleteNotice(int noticeNo){
+        if (noticeRepository.deleteNotice(noticeNo)){
+            return "삭제 되었습니다.";
+        }
+        return "삭제에 실패했습니다.";
     }
 }

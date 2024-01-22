@@ -11,12 +11,17 @@ import java.util.List;
 @Mapper
 @Repository
 public interface NoticeRepository{
+    // notice 전체 조회(목록)
     List<NoticeList> findNoticeDateDesc();
+    // notice 제목 기반 검색
     List<NoticeList> findNoticeTitle(String noticeTitle);
+    // notice 상세 페이지
     NoticeDetailList detailNoticePage(int noticeNo);
+    // notice 등록
     void createNotice(NoticeTable noticeTable);
-
+    // notice 수정
     void updateNotice(NoticeTable noticeTable);
-
     NoticeTable isExistsNotice(String noticeNo);
+    // notice 삭제
+    boolean deleteNotice(int noticeNo);
 }
