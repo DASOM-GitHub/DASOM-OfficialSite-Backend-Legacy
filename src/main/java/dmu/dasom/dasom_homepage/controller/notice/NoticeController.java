@@ -34,8 +34,9 @@ public class NoticeController {
     }
 
     @GetMapping("/create")
-    public String createNotice(NoticeTable noticeTable){
+    public String createNotice(@ModelAttribute NoticeTable noticeTable){
         System.out.println("테스트 ");
+        System.out.println(noticeTable.getNoticeTitle());
         return noticeService.createNotice(noticeTable);
     }
 
