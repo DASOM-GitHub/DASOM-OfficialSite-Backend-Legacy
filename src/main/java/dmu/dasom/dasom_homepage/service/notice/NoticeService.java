@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,23 +35,31 @@ public class NoticeService {
     }
 
     // notice 등록
-    public String createNotice(NoticeTable noticeTable) {
+    public String createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
+
+        String fileName = makeFileName(noticeFile);
+
+        noticeTable.setNoticePic("/files/" + fileName);
+
         noticeRepository.createNotice(noticeTable);
         return "등록 완료";
     }
+
+
     // notice 수정
-    public String updateNotice(NoticeTable noticeTable){
+    public String updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
         if(!isExistsNotice(noticeTable.getNoticeNo()))
             return "해당 게시물은 존재하지 않습니다";
+
+        String fileName = makeFileName(noticeFile);
+
+        noticeTable.setNoticePic("/files/" + fileName);
 
         noticeRepository.updateNotice(noticeTable);
         return "게시물 수정이 완료되었습니다";
     }
 
-    public Boolean isExistsNotice(String noticeNo){
-        Optional<NoticeTable> notice = Optional.ofNullable(noticeRepository.isExistsNotice(noticeNo));
-        return notice.isPresent();
-    }
+
     // notice 삭제
     public String deleteNotice(int noticeNo){
         if (noticeRepository.deleteNotice(noticeNo)){
@@ -57,23 +68,32 @@ public class NoticeService {
         return "삭제에 실패했습니다.";
     }
 
-    public String createNoticeTest(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
-
+    // 파일 저장 및 저장된 파일 경로 반환
+    public String makeFileName(MultipartFile noticeFile) throws Exception{
         // 파일 저장 경로(디렉토리) 지정
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
 
-        // 파일명 앞에 식별자 추가
-        UUID uuid = UUID.randomUUID();
+        // 파일명 앞에 저장 시간 추가
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-        String fileName = uuid + "_" + noticeFile.getOriginalFilename();
+        Date now = new Date();
+
+        String time = sdf.format(now);
+
+        String fileName = time + "_" + noticeFile.getOriginalFilename();
 
         File saveFile = new File(projectPath, fileName);
 
         noticeFile.transferTo(saveFile);
 
-        noticeTable.setNoticePic("/files/" + fileName);
-
-        noticeRepository.createNotice(noticeTable);
-        return "등록 완료";
+        return fileName;
     }
+
+    // 해당 게시물이 존재하는지 무결성 검사
+    public Boolean isExistsNotice(int noticeNo){
+        String strNoticeNo = Integer.toString(noticeNo);
+        Optional<NoticeTable> notice = Optional.ofNullable(noticeRepository.isExistsNotice(strNoticeNo));
+        return notice.isPresent();
+    }
+
 }

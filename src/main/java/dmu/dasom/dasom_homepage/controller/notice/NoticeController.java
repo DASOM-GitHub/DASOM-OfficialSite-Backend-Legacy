@@ -34,17 +34,17 @@ public class NoticeController {
         return noticeService.detailNoticePage(noticeNo);
     }
     // notice 등록
-    @GetMapping("/create")
-    public String createNotice(@ModelAttribute NoticeTable noticeTable){
-        System.out.println("테스트 ");
-        System.out.println(noticeTable.getNoticeTitle());
-        return noticeService.createNotice(noticeTable);
+    @PostMapping("/create")
+    public String createNoticeTest(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+
+        return noticeService.createNotice(noticeTable, noticeFile);
     }
+
     // notice 수정
-    @GetMapping("/update")
-    public String updateNotice(@ModelAttribute NoticeTable noticeTable){
-        System.out.println(noticeTable.getNoticeTitle());
-        return noticeService.updateNotice(noticeTable);
+    @PostMapping("/update")
+    public String updateNotice(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+
+        return noticeService.updateNotice(noticeTable, noticeFile);
     }
     // notice 삭제
     @DeleteMapping("/delete")
@@ -52,12 +52,6 @@ public class NoticeController {
         return noticeService.deleteNotice(noticeNo);
     }
 
-
-    @PostMapping("/create-test")
-    public String createNoticeTest(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
-
-        return noticeService.createNoticeTest(noticeTable, noticeFile);
-    }
 
 }
 

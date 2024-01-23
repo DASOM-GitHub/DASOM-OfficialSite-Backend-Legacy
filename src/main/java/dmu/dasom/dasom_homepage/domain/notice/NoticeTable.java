@@ -10,9 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class NoticeTable {
 
-    private String noticeNo;
+    private int noticeNo;
 
-    private String writerNo;
+    private int writerNo;
 
     private String noticeTitle;
 

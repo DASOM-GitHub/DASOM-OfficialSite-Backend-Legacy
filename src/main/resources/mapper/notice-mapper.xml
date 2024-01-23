@@ -15,8 +15,8 @@
     </select>
 
     <insert id="createNotice" parameterType="NoticeTable">
-        INSERT INTO notice_table (notice_no, writer_no, notice_title, notice_content, notice_pic)
-        VALUES (#{noticeNo}, #{writerNo}, #{noticeTitle}, #{noticeContent}, #{noticePic})
+        INSERT INTO notice_table (writer_no, notice_title, notice_content, notice_pic)
+        VALUES (#{writerNo}, #{noticeTitle}, #{noticeContent}, #{noticePic})
     </insert>
 
     <update id="updateNotice" parameterType="NoticeTable">
