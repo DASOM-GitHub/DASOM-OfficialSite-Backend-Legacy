@@ -7,12 +7,12 @@
     <title>파일 보내기 예제</title>
 </head>
 <body>
-<form name="form" method="get" action="http://localhost:8090/notice/create" enctype="multipart/form-data">
+<form name="form" method="post" action="/notice/create-test" enctype="multipart/form-data">
     <input name="noticeNo" placeholder="notice_no"/> <br>
     <input name="writerNo" placeholder="writer_no"/> <br>
     <input name="noticeTitle" placeholder="notice_title"/> <br>
     <input name="noticeContent" placeholder="notice_content"/> <br>
-    <input  type="file" name="noticePic"/>
+    <input type="file" name="noticeFile"/>
     <input type="submit" id="submit" value="전송"/>
 </form>
 </body>

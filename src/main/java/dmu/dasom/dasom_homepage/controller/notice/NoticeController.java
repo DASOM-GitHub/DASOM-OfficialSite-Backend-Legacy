@@ -6,6 +6,7 @@ import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.service.notice.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,6 +50,13 @@ public class NoticeController {
     @DeleteMapping("/delete")
     public String deleteNotice(@RequestParam(value="pageNo") int noticeNo){
         return noticeService.deleteNotice(noticeNo);
+    }
+
+
+    @PostMapping("/create-test")
+    public String createNoticeTest(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+
+        return noticeService.createNoticeTest(noticeTable, noticeFile);
     }
 
 }

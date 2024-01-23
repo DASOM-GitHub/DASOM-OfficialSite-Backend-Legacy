@@ -5,9 +5,12 @@ import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class NoticeService {
@@ -52,5 +55,25 @@ public class NoticeService {
             return "삭제 되었습니다.";
         }
         return "삭제에 실패했습니다.";
+    }
+
+    public String createNoticeTest(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
+
+        // 파일 저장 경로(디렉토리) 지정
+        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+
+        // 파일명 앞에 식별자 추가
+        UUID uuid = UUID.randomUUID();
+
+        String fileName = uuid + "_" + noticeFile.getOriginalFilename();
+
+        File saveFile = new File(projectPath, fileName);
+
+        noticeFile.transferTo(saveFile);
+
+        noticeTable.setNoticePic("/files/" + fileName);
+
+        noticeRepository.createNotice(noticeTable);
+        return "등록 완료";
     }
 }

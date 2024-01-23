@@ -3,6 +3,7 @@ package dmu.dasom.dasom_homepage.domain.notice;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Getter @Setter
@@ -18,5 +19,6 @@ public class NoticeTable {
     private String noticeContent;
 
     private String noticePic;
+
 
 }
