@@ -4,22 +4,22 @@ import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
+import dmu.dasom.dasom_homepage.service.s3.S3UploadService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     public NoticeService(NoticeRepository noticeRepository) { this.noticeRepository = noticeRepository; }
+
+    @Autowired
+    private S3UploadService s3UploadService;
 
     // notice 조회
     public List<NoticeList> findNoticeDateDesc() {
@@ -37,9 +37,9 @@ public class NoticeService {
     // notice 등록
     public String createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
 
-        String fileName = makeFileName(noticeFile);
+        String fileName = saveFile(noticeFile);
 
-        noticeTable.setNoticePic("/files/" + fileName);
+        noticeTable.setNoticePic(fileName);
 
         noticeRepository.createNotice(noticeTable);
         return "등록 완료";
@@ -51,9 +51,9 @@ public class NoticeService {
         if(!isExistsNotice(noticeTable.getNoticeNo()))
             return "해당 게시물은 존재하지 않습니다";
 
-        String fileName = makeFileName(noticeFile);
+        String fileName = saveFile(noticeFile);
 
-        noticeTable.setNoticePic("/files/" + fileName);
+        noticeTable.setNoticePic(fileName);
 
         noticeRepository.updateNotice(noticeTable);
         return "게시물 수정이 완료되었습니다";
@@ -69,24 +69,9 @@ public class NoticeService {
     }
 
     // 파일 저장 및 저장된 파일 경로 반환
-    public String makeFileName(MultipartFile noticeFile) throws Exception{
-        // 파일 저장 경로(디렉토리) 지정
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+    public String saveFile(MultipartFile noticeFile) throws Exception{
 
-        // 파일명 앞에 저장 시간 추가
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-
-        Date now = new Date();
-
-        String time = sdf.format(now);
-
-        String fileName = time + "_" + noticeFile.getOriginalFilename();
-
-        File saveFile = new File(projectPath, fileName);
-
-        noticeFile.transferTo(saveFile);
-
-        return fileName;
+        return s3UploadService.saveFile(noticeFile);
     }
 
     // 해당 게시물이 존재하는지 무결성 검사
