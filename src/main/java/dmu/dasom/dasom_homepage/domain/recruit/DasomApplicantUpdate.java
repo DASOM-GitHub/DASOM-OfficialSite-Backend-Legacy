@@ -2,14 +2,15 @@ package dmu.dasom.dasom_homepage.domain.recruit;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class DasomApplicant {
+public class DasomApplicantUpdate {
+    private int originRecNo;
+    private int originAcStudentNo;
+
     private int acNo;
-    private int recNo;
     private int acStudentNo;
     private String acName;
     private String acContact;
@@ -17,5 +18,6 @@ public class DasomApplicant {
     private String acDepartment;
     private int acGrade;
     private String reasonForApply;
+    private int recNo;
     private String applyDate;
 }
