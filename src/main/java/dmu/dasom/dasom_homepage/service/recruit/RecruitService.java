@@ -1,8 +1,11 @@
 package dmu.dasom.dasom_homepage.service.recruit;
 
-import dmu.dasom.dasom_homepage.domain.recruit.DasomApplicant;
+import dmu.dasom.dasom_homepage.domain.recruit.*;
+import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
+import dmu.dasom.dasom_homepage.exception.InsertConflictException;
 import dmu.dasom.dasom_homepage.repository.RecruitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,58 +22,98 @@ public class RecruitService {
         this.recruitRepository = recruitRepository;
     }
 
-    // 지원자 정보 저장 메소드
-    public String saveNewApplicant(DasomApplicant dasomApplicant) {
-        // 지원자 학번이 중복 될 경우
-        if (isApplicantValid(dasomApplicant.getAcStudentNo())) {
-            return "!! 지원자 중복됨 !!";
-        } else {
-            // 기수 정보만 따로 넣어줌. 차후 모집일정 연동 예정
-            dasomApplicant.setRecNo(32);
-            recruitRepository.saveApplicant(dasomApplicant);
-            return "** 지원자 저장 성공 **";
+    // 부원 모집 스케줄 추가 메소드
+    public void createNewRecruitSchedule(RecruitSchedule recruitSchedule) {
+        // 데이터 삽입 시 모집 기수 번호 (PK)가 중복 될 경우 예외 발생, 예외 발생 시 응답 예외 throw
+        try {
+            recruitRepository.createNewRecruitSchedule(recruitSchedule);
+        } catch (DuplicateKeyException e) {
+            throw new InsertConflictException("모집 일정 중복 됨");
         }
     }
 
-    // 지원자 중복 여부 검증 메소드
-    public boolean isApplicantValid(int studentNo) {
-        // 매개변수로 받아온 학번에 해당하는 지원자 여부를 판단하여 반환
-        return recruitRepository.getApplicantByStudentNo(studentNo) != null;
+    // 부원 모집 스케줄 리스트 반환 메소드
+    public List<RecruitScheduleIndex> getRecruitScheduleList() {
+        List<RecruitScheduleIndex> recruitScheduleList = recruitRepository.getRecruitScheduleList();
+        if (recruitScheduleList.isEmpty()) {
+            throw new DataNotFoundException("모집 일정 목록 없음");
+        } else {
+            return recruitScheduleList;
+        }
+    }
+
+    // 부원 모집 스케줄 상세 정보 반환 메소드
+    public RecruitSchedule getRecruitScheduleDetails(int recNo) {
+        RecruitSchedule recruitSchedule = recruitRepository.getRecruitScheduleDetails(recNo);
+        if (recruitSchedule == null) {
+            throw new DataNotFoundException("검색 정보에 해당하는 모집 일정 없음");
+        } else {
+            return recruitSchedule;
+        }
+    }
+
+    // 부원 모집 스케줄 정보 업데이트 메소드
+    public void updateRecruitSchedule(int recNo, RecruitSchedule recruitSchedule) {
+        if (recruitRepository.isRecruitScheduleExistByRecNo(recNo)) {
+            recruitSchedule.setRecNo(recNo);
+            recruitRepository.updateRecruitSchedule(recruitSchedule);
+        } else {
+            throw new DataNotFoundException("업데이트 정보에 해당하는 모집 일정 없음");
+        }
+    }
+
+    // 지원자 정보 저장 메소드
+    public void saveNewApplicant(int recNo, DasomApplicant dasomApplicant) {
+        if (recruitRepository.isRecruitScheduleExistByRecNo(recNo)) {
+            if (!isApplicantValid(recNo, dasomApplicant.getAcStudentNo())) {
+                dasomApplicant.setRecNo(recNo);
+                recruitRepository.saveApplicant(dasomApplicant);
+            } else {
+                // 지원자 정보 중복 시 409 코드 반환
+                throw new InsertConflictException("지원자 중복 됨");
+            }
+        } else {
+            // 입력 정보에 해당하는 모집 일정이 없을 경우 404 코드 반환
+            throw new DataNotFoundException("입력 정보에 해당하는 모집 일정 없음");
+        }
+    }
+
+    // 모집 기수에서 해당 학번을 가진 지원자 존재 여부 검증 메소드
+    public boolean isApplicantValid(int recNo, int studentNo) {
+        return recruitRepository.isApplicantExistByRecNoAndStudentNo(recNo, studentNo);
     }
 
     // 지원자 리스트 반환 메소드
-    public List<DasomApplicant> getApplicantList() {
-        // 지원자 리스트를 DB에서 받아옴
-        List<DasomApplicant> applicantList = recruitRepository.getApplicantList();
+    public List<DasomApplicantIndex> getApplicantList(int recNo) {
+        List<DasomApplicantIndex> applicantList = recruitRepository.getApplicantList(recNo);
+        if (applicantList.isEmpty()) throw new DataNotFoundException("지원자 데이터 없음");
         return applicantList;
     }
 
-    // 특정 지원자 정보 반환 메소드
-    public DasomApplicant getApplicant(int acStudentNo) {
-        // 특정 지원자의 정보를 학번을 기준으로 DB에서 찾아옴
-        DasomApplicant applicant = recruitRepository.getApplicantByStudentNo(acStudentNo);
+    // 지원자 상세 정보 반환 메소드
+    public DasomApplicant getApplicant(int recNo, int acStudentNo) {
+        DasomApplicant applicant = recruitRepository.getApplicantByStudentNo(recNo, acStudentNo);
+        if (applicant == null) throw new DataNotFoundException("해당 정보에 해당하는 지원자 없음");
         return applicant;
     }
 
     // 지원자 정보 업데이트 메소드
-    public String updateApplicantInfo(int acStudentNo, DasomApplicant dasomApplicant) {
-        // 매개변수로 받아온 학번에 해당하는 지원자가 있는지 확인
-        if (isApplicantValid(acStudentNo)) { // 해당하는 지원자가 있다면 업데이트 수행
+    public void updateApplicantInfo(int originRecNo, int originAcStudentNo, DasomApplicantUpdate dasomApplicant) {
+        if (isApplicantValid(originRecNo, originAcStudentNo)) {
+            dasomApplicant.setOriginRecNo(originRecNo);
+            dasomApplicant.setOriginAcStudentNo(originAcStudentNo);
             recruitRepository.updateApplicantInfo(dasomApplicant);
-            return "지원자 정보 업데이트 성공";
         } else {
-            return "해당 정보에 해당하는 지원자 없음";
+            throw new DataNotFoundException("해당 정보에 해당하는 지원자 없음");
         }
     }
 
-    // 특정 지원자 삭제 메소드
-    public String deleteApplicant(int acStudentNo) {
-        // 매개변수로 받아온 학번에 해당하는 지원자가 있는지 확인
-        if (isApplicantValid(acStudentNo)) { // 해당하는 지원자가 있다면 삭제 수행
-            recruitRepository.deleteApplicantByStudentNo(acStudentNo);
-            return "지원자 정보 삭제 성공";
+    // 지원자 정보 삭제 메소드
+    public void deleteApplicant(int recNo, int acStudentNo) {
+        if (isApplicantValid(recNo, acStudentNo)) {
+            recruitRepository.deleteApplicantByStudentNo(recNo, acStudentNo);
         } else {
-            return "해당 정보에 해당하는 지원자 없음";
+            throw new DataNotFoundException("해당 정보에 해당하는 지원자 없음");
         }
     }
 
