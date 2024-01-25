@@ -25,19 +25,18 @@ public class SignupService {
     public void verifyNewMember(String uniqueCode) {
         // DB에서 해당 인증코드를 가진 지원자 등록 여부 조회
         if (!signupRepository.isNewMemberExistByCode(uniqueCode))
-            throw new DataNotFoundException("부원 인증 실패");
+            throw new DataNotFoundException();
     }
 
     // 부원 인증 후 가입 로직
     public void saveNewMember(DasomMember newMember) {
         // 이미 가입 된 부원인지 검증
-        if (signupRepository.existByEmail(newMember.getMemEmail())) {
-            throw new InsertConflictException("이미 가입 한 부원입니다");
-        } else {
-            // 비밀번호 암호화 후 DB 저장 수행
-            newMember.setMemPassword(bCrypt.encode(newMember.getMemPassword()));
-            signupRepository.saveNewMember(newMember);
-        }
+        if (signupRepository.existByEmail(newMember.getMemEmail()))
+            throw new InsertConflictException();
+
+        // 비밀번호 암호화 후 DB 저장 수행
+        newMember.setMemPassword(bCrypt.encode(newMember.getMemPassword()));
+        signupRepository.saveNewMember(newMember);
     }
 
 }

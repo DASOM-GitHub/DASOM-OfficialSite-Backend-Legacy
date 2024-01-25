@@ -24,14 +24,14 @@ public class SignupController {
     @PostMapping("/verify")
     public ResponseEntity<ApiResponse<Void>> verifyNewMember(@RequestBody DasomNewMember verifyReq) {
         signupService.verifyNewMember(verifyReq.getUniqueCode());
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, "부원 인증 성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
     // 회원 가입 프로세스
     @PostMapping()
     public ResponseEntity<ApiResponse<Void>> signupProc(@RequestBody DasomMember newMember) {
         signupService.saveNewMember(newMember);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, "부원 가입 성공"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
 }
