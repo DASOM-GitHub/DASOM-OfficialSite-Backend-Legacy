@@ -35,6 +35,11 @@
         WHERE rec_no = #{recNo};
     </update>
 
+    <delete id="deleteRecruitSchedule" parameterType="int">
+        DELETE FROM recruit_schedule WHERE rec_no = #{recNo}
+    </delete>
+
+
     <select id="isRecruitScheduleExistByRecNo" parameterType="int" resultType="boolean">
         SELECT EXISTS(SELECT * FROM recruit_schedule WHERE rec_no = #{recNo}) AS result;
     </select>

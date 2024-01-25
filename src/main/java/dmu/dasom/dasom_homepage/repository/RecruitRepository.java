@@ -18,6 +18,8 @@ public interface RecruitRepository {
 
     void updateRecruitSchedule(RecruitSchedule recruitSchedule);
 
+    void deleteRecruitSchedule(int recNo);
+
     Boolean isRecruitScheduleExistByRecNo(int RecNo);
 
     void saveApplicant(DasomApplicant dasomApplicant);
