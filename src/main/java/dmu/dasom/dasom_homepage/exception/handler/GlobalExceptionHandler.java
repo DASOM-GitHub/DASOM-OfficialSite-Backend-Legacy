@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     @ExceptionHandler(InsertConflictException.class)
     public ResponseEntity<ApiResponse<Void>> handleInsertConflictException(InsertConflictException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(false, ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(false));
     }
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleDataNotFoundException(DataNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, ex.getMessage()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false));
     }
 }
