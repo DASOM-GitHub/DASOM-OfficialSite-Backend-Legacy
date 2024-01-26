@@ -76,12 +76,12 @@ public class SecurityConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable);
         // 경로별 권한 인가
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/signup", "/signup/**", "/login").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/my-page").hasAnyRole("ADMIN", "MEMBER")
-                        .anyRequest().authenticated());
+//        http
+//                .authorizeHttpRequests((auth) -> auth
+//                        .requestMatchers("/", "/signup", "/signup/**", "/login").permitAll()
+//                        .requestMatchers("/admin").hasRole("ADMIN")
+//                        .requestMatchers("/my-page").hasAnyRole("ADMIN", "MEMBER")
+//                        .anyRequest().authenticated());
         // 커스텀 필터 등록
         http
                 .addFilterBefore(new JwtFilter(jwtUtil), CustomAuthenticationFilter.class);

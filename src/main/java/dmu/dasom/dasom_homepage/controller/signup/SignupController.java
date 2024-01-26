@@ -3,9 +3,12 @@ package dmu.dasom.dasom_homepage.controller.signup;
 import dmu.dasom.dasom_homepage.domain.member.DasomMember;
 import dmu.dasom.dasom_homepage.domain.member.DasomNewMember;
 import dmu.dasom.dasom_homepage.service.signup.SignupService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 @RequestMapping("/signup")
@@ -18,9 +21,10 @@ public class SignupController {
         this.signupService = signupService;
     }
 
+    @ResponseBody
     @PostMapping("/verify")
-    public ResponseEntity<Object> verifyNewMember(@RequestBody DasomNewMember verifyReq) {
-        System.out.println("uniqueCode ==> " + verifyReq.toString());
+    public ResponseEntity<Object> verifyNewMember( @RequestBody DasomNewMember verifyReq) {
+        System.out.println("uniqueCode ==> " + verifyReq);
 
         // 인증 여부 확인
         boolean isAuthenticated = signupService.verifyNewMember(verifyReq.getUniqueCode());
@@ -40,9 +44,9 @@ public class SignupController {
 
         System.out.println("newMember => " + newMember.toString());
         if (signupService.saveNewMember(newMember))
-            return ResponseEntity.ok("부원 가입 성공");
+            return ResponseEntity.ok("회원가입 성공");
         else
-            return ResponseEntity.ok("부원 가입 실패");
+            return ResponseEntity.ok("회원가입 실패");
     }
 
 }
