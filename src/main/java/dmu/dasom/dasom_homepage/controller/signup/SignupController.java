@@ -1,12 +1,16 @@
 package dmu.dasom.dasom_homepage.controller.signup;
 
 import dmu.dasom.dasom_homepage.domain.member.DasomMember;
+import dmu.dasom.dasom_homepage.domain.member.DasomNewMember;
+import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import dmu.dasom.dasom_homepage.service.signup.SignupService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/signup")
@@ -19,37 +23,20 @@ public class SignupController {
         this.signupService = signupService;
     }
 
+
+    // 부원 인증 프로세스
     @PostMapping("/verify")
-    public ResponseEntity<Object> verifyNewMember(@RequestBody Map<String, Object> paramMap) {
-        System.out.println("uniqueCode ==> " + paramMap);
+    public ResponseEntity<ApiResponse<Void>> verifyNewMember(@RequestBody DasomNewMember verifyReq) {
+        signupService.verifyNewMember(verifyReq.getUniqueCode());
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
 
-        // 인증 여부 확인
-        boolean isAuthenticated = signupService.verifyNewMember(paramMap.get("uniqueCode").toString());
-
-        if (isAuthenticated) {
-            return ResponseEntity.ok("부원 인증 성공");
-        } else {
-            return ResponseEntity.ok("부원 인증 실패");
-        }
     }
 
-    // 회원가입 프로세스 테스트 용
+    // 회원 가입 프로세스
     @PostMapping()
-    public ResponseEntity<String> signupProc(@RequestParam Map<String, Object> paramMap) {
-        DasomMember newMember = new DasomMember();
-        newMember.setMemEmail(paramMap.get("email").toString());
-        newMember.setMemPassword(paramMap.get("password").toString());
-        newMember.setMemName(paramMap.get("name").toString());
-        newMember.setMemGrade(Integer.parseInt(paramMap.get("grade").toString()));
-        newMember.setMemDepartment(paramMap.get("major").toString());
-        // 수동 삽입
-        newMember.setMemRecNo(32);
-
-        System.out.println("newMember => " + newMember);
-        if (signupService.saveNewMember(newMember))
-            return ResponseEntity.ok("부원 가입 성공");
-        else
-            return ResponseEntity.ok("부원 가입 실패");
+    public ResponseEntity<ApiResponse<Void>> signupProc(@RequestBody DasomMember newMember) {
+        signupService.saveNewMember(newMember);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
 }

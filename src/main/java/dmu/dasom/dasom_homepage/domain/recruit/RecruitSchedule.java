@@ -10,5 +10,12 @@ public class RecruitSchedule {
     private int recNo;
     private String recName;
     private String recDescription;
-    private String recStatus;
+    private String isRecActive;
+
+    private String applyStart;
+    private String applyEnd;
+    private String firstAnnounce;
+    private String interviewStart;
+    private String interviewEnd;
+    private String secondAnnounce;
 }
