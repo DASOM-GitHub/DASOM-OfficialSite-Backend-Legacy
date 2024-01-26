@@ -1,8 +1,6 @@
 package dmu.dasom.dasom_homepage.repository;
 
-import dmu.dasom.dasom_homepage.domain.member.DasomMember;
-import dmu.dasom.dasom_homepage.domain.member.DasomNewMember;
-import dmu.dasom.dasom_homepage.domain.recruit.DasomApplicant;
+import dmu.dasom.dasom_homepage.domain.recruit.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,13 +10,27 @@ import java.util.Map;
 @Mapper
 @Repository
 public interface RecruitRepository {
+    void createNewRecruitSchedule(RecruitSchedule recruitSchedule);
+
+    List<RecruitScheduleIndex> getRecruitScheduleList();
+
+    RecruitSchedule getRecruitScheduleDetails(int recNo);
+
+    void updateRecruitSchedule(RecruitSchedule recruitSchedule);
+
+    void deleteRecruitSchedule(int recNo);
+
+    Boolean isRecruitScheduleExistByRecNo(int RecNo);
+
     void saveApplicant(DasomApplicant dasomApplicant);
 
-    List<DasomApplicant> getApplicantList();
+    List<DasomApplicantIndex> getApplicantList(int recNo);
 
-    DasomApplicant getApplicantByStudentNo(int studentNo);
+    DasomApplicant getApplicantByStudentNo(int recNo, int studentNo);
 
-    void updateApplicantInfo(DasomApplicant dasomApplicant);
+    void updateApplicantInfo(DasomApplicantUpdate dasomApplicant);
 
-    void deleteApplicantByStudentNo(int studentNo);
+    void deleteApplicantByStudentNo(int recNo, int studentNo);
+
+    Boolean isApplicantExistByRecNoAndStudentNo(int recNo, int acStudentNo);
 }
