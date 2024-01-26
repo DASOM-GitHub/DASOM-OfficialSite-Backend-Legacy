@@ -34,7 +34,6 @@ public class SignupController {
 
     // 회원 가입 프로세스
     @PostMapping()
-
     public ResponseEntity<ApiResponse<Void>> signupProc(@RequestBody DasomMember newMember) {
         signupService.saveNewMember(newMember);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
