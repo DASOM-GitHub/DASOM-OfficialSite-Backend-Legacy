@@ -6,11 +6,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -22,10 +24,12 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, RedisTemplate<String, String> redisTemplate) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -58,7 +62,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         // RFC 7235 정의에 따라 아래와 같은 인증 헤더 형태를 가져야 한다
         response.addHeader("Authorization", "Bearer " + token);
+        //로그아웃 구분하기 위해 redis에 저장
+        redisTemplate.opsForValue().set("JWT_TOKEN_" + customUserDetails.getUsername(), token);
+
     }
+
 
     // 로그인 실패 핸들러
     @Override

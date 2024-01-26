@@ -35,7 +35,16 @@ public class SignupController {
 
     // 회원가입 프로세스 테스트 용
     @PostMapping()
-    public ResponseEntity<String> signupProc(DasomMember newMember) {
+    public ResponseEntity<String> signupProc(@RequestParam Map<String, Object> paramMap) {
+        DasomMember newMember = new DasomMember();
+        newMember.setMemEmail(paramMap.get("email").toString());
+        newMember.setMemPassword(paramMap.get("password").toString());
+        newMember.setMemName(paramMap.get("name").toString());
+        newMember.setMemGrade(Integer.parseInt(paramMap.get("grade").toString()));
+        newMember.setMemDepartment(paramMap.get("major").toString());
+        // 수동 삽입
+        newMember.setMemRecNo(32);
+
         System.out.println("newMember => " + newMember);
         if (signupService.saveNewMember(newMember))
             return ResponseEntity.ok("부원 가입 성공");

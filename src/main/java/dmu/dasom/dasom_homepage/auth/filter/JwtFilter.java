@@ -18,10 +18,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+
     public JwtFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
+    //HTTP 요청이 들어올 때마다 한 번씩 호출되는 함수입니다. 이 함수에서 JWT 인증을 수행
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Authorization 헤더를 찾아 검증한다
