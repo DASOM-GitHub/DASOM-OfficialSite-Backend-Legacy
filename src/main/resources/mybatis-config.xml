@@ -15,5 +15,7 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomNewMember" alias="DasomNewMember"/>
         
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomMember" alias="DasomMember"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.MemberState" alias="MemberState"/>
+
     </typeAliases>
 </configuration>

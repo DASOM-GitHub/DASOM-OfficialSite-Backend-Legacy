@@ -11,6 +11,7 @@ public class CustomUserDetails implements UserDetails {
 
     private final DasomMember member;
 
+
     public CustomUserDetails(DasomMember dasomMember) {
         this.member = dasomMember;
     }

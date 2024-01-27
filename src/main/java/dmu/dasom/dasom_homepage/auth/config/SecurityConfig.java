@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,10 +30,12 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil, RedisTemplate<String, String> redisTemplate) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.redisTemplate = redisTemplate;
     }
 
     @Bean
@@ -89,28 +92,28 @@ public class SecurityConfig {
         // 경로별 권한 인가
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers(HttpMethod.POST,
-                                "/recruit/{recNo}/applicants",
-                                "/signup",
-                                "/signup/verify",
-                                "/login").permitAll()
-                        .requestMatchers(HttpMethod.GET,
-                                "/recruit",
-                                "/recruit/{recNo}").permitAll()
-                        .requestMatchers(HttpMethod.POST,
-                                "/recruit").hasAnyRole("BOARD")
-                        .requestMatchers(HttpMethod.GET,
-                                "/recruit/{recNo}",
-                                "/recruit/{recNo}/applicants/**",
-                                "/admin",
-                                "/admin/**").hasAnyRole("BOARD")
-                        .requestMatchers(HttpMethod.PUT,
-                                "/recruit",
-                                "/recruit/**").hasAnyRole("BOARD")
-                        .requestMatchers(HttpMethod.DELETE,
-                                "/recruit",
-                                "/recruit/**").hasAnyRole("BOARD")
-                        .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.POST,
+                                        "/recruit/{recNo}/applicants",
+                                        "/signup",
+                                        "/signup/verify",
+                                        "/login").permitAll()
+                                .requestMatchers(HttpMethod.GET,
+                                        "/recruit",
+                                        "/recruit/{recNo}").permitAll()
+                                .requestMatchers(HttpMethod.POST,
+                                        "/recruit").hasAnyRole("BOARD")
+                                .requestMatchers(HttpMethod.GET,
+                                        "/recruit/{recNo}",
+                                        "/recruit/{recNo}/applicants/**",
+                                        "/admin",
+                                        "/admin/**").hasAnyRole("BOARD")
+                                .requestMatchers(HttpMethod.PUT,
+                                        "/recruit",
+                                        "/recruit/**").hasAnyRole("BOARD")
+                                .requestMatchers(HttpMethod.DELETE,
+                                        "/recruit",
+                                        "/recruit/**").hasAnyRole("BOARD")
+                                .anyRequest().authenticated()
                         // 테스트 시에는 위 모두 주석 처리 후 아래 주석 해제
                         // .anyRequest().permitAll()
                 );
@@ -118,7 +121,7 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JwtFilter(jwtUtil), CustomAuthenticationFilter.class);
         http
-                .addFilterAt(new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtUtil),
+                .addFilterAt(new CustomAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtUtil, redisTemplate),
                         UsernamePasswordAuthenticationFilter.class);
         // jwt 사용을 위해선 세션을 stateless로 설정해야 함
         http
