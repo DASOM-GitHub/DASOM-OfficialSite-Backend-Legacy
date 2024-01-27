@@ -57,7 +57,7 @@
     </select>
 
     <select id="getApplicantByStudentNo" parameterType="int" resultType="DasomApplicant">
-        SELECT * FROM dasom_applicant WHERE rec_no = #{recNo} AND ac_student_no = #{studentNo}
+        SELECT * FROM dasom_applicant WHERE rec_no = #{recNo} AND ac_student_no = #{acStudentNo}
     </select>
 
     <update id="updateApplicantInfo" parameterType="DasomApplicantUpdate">
