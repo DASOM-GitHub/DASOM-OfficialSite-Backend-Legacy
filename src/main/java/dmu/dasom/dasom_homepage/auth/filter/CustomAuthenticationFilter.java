@@ -64,7 +64,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
+        // 토큰 유효시간 : 3H
+        String token = jwtUtil.createJwt(username, role, 60 * 60 * 3 * 1000L);
 
         // RFC 7235 정의에 따라 아래와 같은 인증 헤더 형태를 가져야 한다
         response.addHeader("Authorization", "Bearer " + token);

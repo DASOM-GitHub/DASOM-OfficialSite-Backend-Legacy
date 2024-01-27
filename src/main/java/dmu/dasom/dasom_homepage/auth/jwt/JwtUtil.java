@@ -1,5 +1,6 @@
 package dmu.dasom.dasom_homepage.auth.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,15 @@ public class JwtUtil {
     }
 
     public Boolean isExpired(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        try {
+            Date expiration = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration();
+
+            Date now = new Date();
+
+            return expiration.before(now);
+        } catch (ExpiredJwtException ex) { // 토큰 만료 시 예외 발생함
+            return true;
+        }
     }
 
     // jwt 토큰 생성

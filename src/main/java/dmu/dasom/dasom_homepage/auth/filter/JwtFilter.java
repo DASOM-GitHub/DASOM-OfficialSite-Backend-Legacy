@@ -27,20 +27,16 @@ public class JwtFilter extends OncePerRequestFilter {
         // Authorization 헤더를 찾아 검증한다
         String authorization = request.getHeader("Authorization");
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-            System.out.println("!! Token is null !!");
             filterChain.doFilter(request, response);
 
             return;
         }
-
-        System.out.println("** authorization processing **");
 
         // 헤더 데이터에서 토큰만 추출
         String token = authorization.split(" ")[1];
 
         // 토큰 만료 여부 검증
         if (jwtUtil.isExpired(token)) {
-            System.out.println("!! Token is expired !!");
             filterChain.doFilter(request, response);
 
             return;

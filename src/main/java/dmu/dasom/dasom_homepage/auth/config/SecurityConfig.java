@@ -6,6 +6,9 @@ import dmu.dasom.dasom_homepage.auth.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +38,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_PRESIDENT > ROLE_BOARD > ROLE_GROUPLEADER > ROLE_MEMBER");
+
+        return hierarchy;
     }
 
     // 비밀번호 암호화 및 대조 역할
@@ -78,10 +89,31 @@ public class SecurityConfig {
         // 경로별 권한 인가
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/signup", "/signup/**", "/login").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/my-page").hasAnyRole("ADMIN", "MEMBER")
-                        .anyRequest().authenticated());
+                        .requestMatchers(HttpMethod.POST,
+                                "/recruit/{recNo}/applicants",
+                                "/signup",
+                                "/signup/verify",
+                                "/login").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/recruit",
+                                "/recruit/{recNo}").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/recruit").hasAnyRole("BOARD")
+                        .requestMatchers(HttpMethod.GET,
+                                "/recruit/{recNo}",
+                                "/recruit/{recNo}/applicants/**",
+                                "/admin",
+                                "/admin/**").hasAnyRole("BOARD")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/recruit",
+                                "/recruit/**").hasAnyRole("BOARD")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/recruit",
+                                "/recruit/**").hasAnyRole("BOARD")
+                        .anyRequest().authenticated()
+                        // 테스트 시에는 위 모두 주석 처리 후 아래 주석 해제
+                        // .anyRequest().permitAll()
+                );
         // 커스텀 필터 등록
         http
                 .addFilterBefore(new JwtFilter(jwtUtil), CustomAuthenticationFilter.class);
