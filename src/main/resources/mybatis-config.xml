@@ -21,6 +21,5 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList" alias="NoticeDetailList"/>
 
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeTable" alias="NoticeTable" />
-
     </typeAliases>
 </configuration>
