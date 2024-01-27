@@ -13,9 +13,12 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.recruit.DasomApplicantUpdate" alias="DasomApplicantUpdate"/>
 
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomNewMember" alias="DasomNewMember"/>
-        
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomMember" alias="DasomMember"/>
+
         <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.MemberState" alias="MemberState"/>
 
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeList" alias="NoticeList"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList" alias="NoticeDetailList"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeTable" alias="NoticeTable" />
     </typeAliases>
 </configuration>
