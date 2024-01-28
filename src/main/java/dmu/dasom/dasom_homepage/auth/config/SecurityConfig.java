@@ -96,7 +96,8 @@ public class SecurityConfig {
                                         "/recruit/{recNo}/applicants",
                                         "/signup",
                                         "/signup/verify",
-                                        "/login").permitAll()
+                                        "/login",
+                                        "/auth/logout").permitAll()
                                 .requestMatchers(HttpMethod.GET,
                                         "/recruit",
                                         "/recruit/{recNo}").permitAll()

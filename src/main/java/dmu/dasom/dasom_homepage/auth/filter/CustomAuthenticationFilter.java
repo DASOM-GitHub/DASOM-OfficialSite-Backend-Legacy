@@ -14,12 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 // formLogin을 비활성 했기 때문에 직접 UsernamePasswordAuthenticationFilter를 커스텀 함
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -68,13 +68,13 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
-        // 토큰 유효시간 : 3H
-        String token = jwtUtil.createJwt(username, role, 60 * 60 * 3 * 1000L);
+        // 토큰 유효시간 : 30m
+        String token = jwtUtil.createJwt(username, role, 60 * 30 * 1000L);
 
         // RFC 7235 정의에 따라 아래와 같은 인증 헤더 형태를 가져야 한다
         response.addHeader("Authorization", "Bearer " + token);
         //로그아웃 구분하기 위해 redis에 저장
-        redisTemplate.opsForValue().set("JWT_TOKEN_" + customUserDetails.getUsername(), token);
+        redisTemplate.opsForValue().set("JWT_TOKEN_" + customUserDetails.getUsername(), token, 30, TimeUnit.MINUTES);
 
     }
 
