@@ -4,6 +4,7 @@ import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
+import dmu.dasom.dasom_homepage.exception.InsertConflictException;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import dmu.dasom.dasom_homepage.service.s3.S3UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,13 @@ public class NoticeService {
 
     // notice 등록
     public String createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
+        if(isExistsNotice(noticeTable.getNoticeNo()))
+            throw new InsertConflictException();
+
         String fileName = saveFile(noticeFile);
 
         noticeTable.setNoticePic(fileName);
+
         noticeRepository.createNotice(noticeTable);
         return "등록 완료";
     }
