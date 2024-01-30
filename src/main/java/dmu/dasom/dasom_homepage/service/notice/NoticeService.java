@@ -43,11 +43,9 @@ public class NoticeService {
 
     // notice 등록
     public String createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
-
         String fileName = saveFile(noticeFile);
 
         noticeTable.setNoticePic(fileName);
-
         noticeRepository.createNotice(noticeTable);
         return "등록 완료";
     }

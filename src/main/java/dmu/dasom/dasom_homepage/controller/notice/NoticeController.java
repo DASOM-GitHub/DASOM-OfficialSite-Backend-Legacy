@@ -41,10 +41,10 @@ public class NoticeController {
     }
 
     // notice 등록
-    @PostMapping("/create")
-    public String createNoticeTest(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+    @PostMapping("/{noticeNo}")
+    public ResponseEntity<ApiResponse<String>> createNoticeTest(@PathVariable("noticeNo") int noticeNo, @ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
 
-        return noticeService.createNotice(noticeTable, noticeFile);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,noticeService.createNotice(noticeTable, noticeFile)));
     }
 
     // notice 수정
