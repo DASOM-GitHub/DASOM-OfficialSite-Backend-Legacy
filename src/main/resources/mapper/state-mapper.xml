@@ -15,4 +15,7 @@
         UPDATE member_table set mem_state = #{memState} where memno = #{memNO}
     </update>
 
+    <select id="getMemberList" resultType="MemberState">
+        SELECT mem_no, mem_name, mem_state FROM member_table
+    </select>
 </mapper>

@@ -1,14 +1,14 @@
 package dmu.dasom.dasom_homepage.controller.admin;
 
 import dmu.dasom.dasom_homepage.domain.admin.MemberState;
-import dmu.dasom.dasom_homepage.service.recruit.AdminService;
+import dmu.dasom.dasom_homepage.service.admin.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.lang.reflect.Member;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -43,5 +43,9 @@ public class AdminController {
         adminService.stateChange(memberState);
         return "/admin";
     }
-
+    //회원 리스트
+    @GetMapping("/search")
+    public List<MemberState> searchMember(MemberState memberState){
+        return adminService.searchMember(memberState);
+    }
 }

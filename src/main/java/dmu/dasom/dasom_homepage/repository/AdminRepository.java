@@ -4,6 +4,8 @@ import dmu.dasom.dasom_homepage.domain.admin.MemberState;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface AdminRepository {
@@ -12,6 +14,6 @@ public interface AdminRepository {
     void modifyMember(MemberState memberState);
 
     void stateChange(MemberState memberState);
-
+    List<MemberState> getMemberList();
 
 }
