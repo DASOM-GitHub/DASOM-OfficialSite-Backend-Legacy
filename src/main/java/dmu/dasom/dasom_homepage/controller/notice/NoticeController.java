@@ -3,8 +3,12 @@ package dmu.dasom.dasom_homepage.controller.notice;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
+import dmu.dasom.dasom_homepage.domain.recruit.DasomApplicantIndex;
+import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import dmu.dasom.dasom_homepage.service.notice.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,21 +22,24 @@ public class NoticeController {
 
     @Autowired
     public NoticeController(NoticeService noticeService) { this.noticeService = noticeService; }
+
     // notice 전체 조회(목록)
-    @GetMapping("/list")
-    public List<NoticeList> findNoticeAll() {
-        return noticeService.findNoticeDateDesc();
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<NoticeList>>> findNoticeAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.findNoticeDateDesc()));
     }
+
     // notice 제목 기반 조회
-    @GetMapping("/search")
-    public List<NoticeList> findNoticeTitle(@RequestParam(value = "title") String noticeTitle) {
-        return noticeService.findNoticeTitle(noticeTitle);
+    @GetMapping("/title")
+    public ResponseEntity<ApiResponse<List<NoticeList>>> findNoticeTitle(@RequestParam(value = "title") String noticeTitle) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.findNoticeTitle(noticeTitle)));
     }
     // notice 상세 페이지
-    @GetMapping("/list/detail")
-    public NoticeDetailList detailPage(@RequestParam(value="pageNo") int noticeNo) {
-        return noticeService.detailNoticePage(noticeNo);
+    @GetMapping("/{noticeNo}")
+    public ResponseEntity<ApiResponse<NoticeDetailList>> detailPage(@PathVariable("noticeNo") int noticeNo) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.detailNoticePage(noticeNo)));
     }
+
     // notice 등록
     @PostMapping("/create")
     public String createNoticeTest(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
@@ -47,9 +54,9 @@ public class NoticeController {
         return noticeService.updateNotice(noticeTable, noticeFile);
     }
     // notice 삭제
-    @DeleteMapping("/delete")
-    public String deleteNotice(@RequestParam(value="pageNo") int noticeNo){
-        return noticeService.deleteNotice(noticeNo);
+    @DeleteMapping("/{noticeNo}")
+    public ResponseEntity<ApiResponse<String>> deleteNotice(@PathVariable("noticeNo") int noticeNo){
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.deleteNotice(noticeNo)));
     }
 
 

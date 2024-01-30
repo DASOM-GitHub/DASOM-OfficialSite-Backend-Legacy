@@ -3,6 +3,7 @@ package dmu.dasom.dasom_homepage.service.notice;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
+import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import dmu.dasom.dasom_homepage.service.s3.S3UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,21 @@ public class NoticeService {
 
     // notice 조회
     public List<NoticeList> findNoticeDateDesc() {
-        return noticeRepository.findNoticeDateDesc();
+        List<NoticeList> noticeList = noticeRepository.findNoticeDateDesc();
+        if (noticeList.isEmpty()) throw new DataNotFoundException();
+        return noticeList;
     }
+
     // 제목 기반 검색
     public List<NoticeList> findNoticeTitle(String noticeTitle) {
         return noticeRepository.findNoticeTitle(noticeTitle);
     }
+
     // 상세 페이지
     public NoticeDetailList detailNoticePage(int noticeNo) {
-        return noticeRepository.detailNoticePage(noticeNo);
+        NoticeDetailList noticeList = noticeRepository.detailNoticePage(noticeNo);
+        if (noticeList == null) throw new DataNotFoundException();
+        return noticeList;
     }
 
     // notice 등록
@@ -65,7 +72,7 @@ public class NoticeService {
         if (noticeRepository.deleteNotice(noticeNo)){
             return "삭제 되었습니다.";
         }
-        return "삭제에 실패했습니다.";
+        throw new DataNotFoundException();
     }
 
     // 파일 저장 및 저장된 파일 경로 반환
