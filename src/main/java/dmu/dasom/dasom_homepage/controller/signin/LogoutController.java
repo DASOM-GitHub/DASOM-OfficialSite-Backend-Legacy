@@ -29,4 +29,11 @@ public class LogoutController {
         // HTTP 200 OK 상태 코드 반환
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<String>> refresh(HttpServletRequest request) {
+        String refreshToken = request.getHeader("Refresh");
+        String newAccessToken = logoutService.refreshToken(refreshToken);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, newAccessToken));
+    }
 }

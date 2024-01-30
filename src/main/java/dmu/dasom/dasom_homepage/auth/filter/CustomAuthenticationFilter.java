@@ -69,12 +69,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String role = auth.getAuthority();
         // 토큰 유효시간 : 30m
-        String token = jwtUtil.createJwt(username, role, 60 * 30 * 1000L);
+        // 엑세스 토큰 유효시간 : 10m
+        String accessToken = jwtUtil.createJwt(username, role, 60 * 10 * 1000L);
+        // 리프레시 토큰 유효시간 : 24h
+        String refreshToken = jwtUtil.createJwt(username, role, 24 * 60 * 60 * 1000L);
 
-        // RFC 7235 정의에 따라 아래와 같은 인증 헤더 형태를 가져야 한다
-        response.addHeader("Authorization", "Bearer " + token);
-        //로그아웃 구분하기 위해 redis에 저장
-        redisTemplate.opsForValue().set("JWT_TOKEN_" + customUserDetails.getUsername(), token, 30, TimeUnit.MINUTES);
+        // 토큰 반환
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Refresh", "Bearer " + refreshToken);
+
+        // 로그아웃 구분하기 위해 redis에 저장
+        redisTemplate.opsForValue().set("JWT_TOKEN_" + customUserDetails.getUsername(), accessToken, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set("REFRESH_TOKEN_" + customUserDetails.getUsername(), refreshToken, 6, TimeUnit.HOURS);
 
     }
 

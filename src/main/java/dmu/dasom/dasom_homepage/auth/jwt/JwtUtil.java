@@ -54,4 +54,21 @@ public class JwtUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
+
+
+    public String refresh(String refreshToken) {
+        // 리프레시 토큰 검증
+        if (!isExpired(refreshToken)) {
+            throw new InvalidTokenException("Invalid refresh token.");
+        }
+
+        String username = getUsername(refreshToken);
+
+        // 새 엑세스 토큰 발급
+        String newAccessToken = createJwt(username, "", 60 * 10 * 1000L);
+
+        return newAccessToken;
+    }
+
 }
