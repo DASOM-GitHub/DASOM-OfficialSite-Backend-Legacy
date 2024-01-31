@@ -59,7 +59,7 @@ public class NoticeService {
     // notice 수정
     public String updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
         if(!isExistsNotice(noticeTable.getNoticeNo()))
-            return "해당 게시물은 존재하지 않습니다";
+            throw new DataNotFoundException();
 
         String fileName = saveFile(noticeFile);
 
