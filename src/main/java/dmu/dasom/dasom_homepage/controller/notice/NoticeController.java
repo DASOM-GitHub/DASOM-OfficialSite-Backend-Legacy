@@ -49,7 +49,7 @@ public class NoticeController {
 
     // notice 수정
     @PutMapping("/{noticeNo}")
-    public ResponseEntity<ApiResponse<String>> updateNotice(@PathVariable int noticeNo, @ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+    public ResponseEntity<ApiResponse<String>> updateNotice(@PathVariable("noticeNo") int noticeNo, @ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
 
         noticeTable.setNoticeNo(noticeNo);
 
