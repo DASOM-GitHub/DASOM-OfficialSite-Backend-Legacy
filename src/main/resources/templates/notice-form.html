@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>파일 보내기 예제</title>
+</head>
+
+<h3> 등록 테스트 </h3>
+<body>
+<form name="form" method="post" action="/project" enctype="multipart/form-data">
+    <input name="projectNo" placeholder="projectNo"/> <br>
+    <input name="writerNo" placeholder="writerNo"/> <br>
+    <input name="organizerNo" placeholder="organizerNo"/> <br>
+    <input name="projectTitle" placeholder="projectTitle"/> <br>
+    <input name="projectContent" placeholder="proectContent"/> <br>
+    <input name="projectCategory" placeholder="proectCategory"/> <br>
+    <input type="file" name="projectFile"/><br>
+    <input name="startDate" placeholder="startDate"/> <br>
+    <input name="endDate" placeholder="endDate"/>
+    <input type="submit" value="전송"/>
+</form>
+<br>
+<h3> 수정 테스트 </h3>
+<form name="form" method="put" action="/project" enctype="multipart/form-data">
+    <input name="projectNo" placeholder="projectNo"/> <br>
+    <input name="writerNo" placeholder="writerNo"/> <br>
+    <input name="organizerNo" placeholder="organizerNo"/> <br>
+    <input name="projectTitle" placeholder="projectTitle"/> <br>
+    <input name="projectContent" placeholder="proectContent"/> <br>
+    <input name="projectCategory" placeholder="proectCategory"/> <br>
+    <input type="file" name="projectFile"/><br>
+    <input name="startDate" placeholder="startDate"/> <br>
+    <input name="endDate" placeholder="endDate"/>
+    <input type="submit" value="전송"/>
+</form>
+</body>
+</html>

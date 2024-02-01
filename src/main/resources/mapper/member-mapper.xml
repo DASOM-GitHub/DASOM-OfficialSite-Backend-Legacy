@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.MemberRepository">
+
+    <select id="getMemberByEmail" parameterType="String" resultType="DasomMember">
+        SELECT * FROM member_table WHERE mem_email = #{memEmail}
+    </select>
+
+</mapper>
