@@ -47,7 +47,7 @@ public class NoticeService {
         if(isExistsNotice(noticeTable.getNoticeNo()))
             throw new InsertConflictException();
 
-        String fileName = saveFile(noticeFile);
+        String fileName = s3UploadService.saveFile(noticeFile);
 
         noticeTable.setNoticePic(fileName);
 
@@ -61,7 +61,13 @@ public class NoticeService {
         if(!isExistsNotice(noticeTable.getNoticeNo()))
             throw new DataNotFoundException();
 
-        String fileName = saveFile(noticeFile);
+        NoticeDetailList noticeList = noticeRepository.detailNoticePage(noticeTable.getNoticeNo());
+
+        String noticePic = noticeList.getNoticePic();
+
+        s3UploadService.deleteFile(noticePic);
+
+        String fileName = s3UploadService.saveFile(noticeFile);
 
         noticeTable.setNoticePic(fileName);
 
@@ -78,11 +84,6 @@ public class NoticeService {
         throw new DataNotFoundException();
     }
 
-    // 파일 저장 및 저장된 파일 경로 반환
-    public String saveFile(MultipartFile noticeFile) throws Exception{
-
-        return s3UploadService.saveFile(noticeFile);
-    }
 
     // 해당 게시물이 존재하는지 무결성 검사
     public Boolean isExistsNotice(int noticeNo){

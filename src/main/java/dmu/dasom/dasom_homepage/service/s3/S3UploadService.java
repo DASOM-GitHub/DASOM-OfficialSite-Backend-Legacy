@@ -1,13 +1,14 @@
 package dmu.dasom.dasom_homepage.service.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,5 +39,18 @@ public class S3UploadService {
 
         amazonS3.putObject(bucket, fileName, noticeFile.getInputStream(), metadata);
         return amazonS3.getUrl(bucket, fileName).toString();
+    }
+
+    public void deleteFile(String fileName){
+        int index = fileName.indexOf("20");
+
+        String file = fileName;
+
+        if (index != -1) {
+            file = fileName.substring(index);
+        }
+        System.out.println(file);
+        DeleteObjectRequest request = new DeleteObjectRequest(bucket, file);
+        amazonS3.deleteObject(request);
     }
 }
