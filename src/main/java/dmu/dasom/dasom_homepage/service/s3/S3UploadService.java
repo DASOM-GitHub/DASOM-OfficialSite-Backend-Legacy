@@ -5,7 +5,10 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -23,6 +26,13 @@ public class S3UploadService {
     private String bucket;
 
     public String saveFile(MultipartFile noticeFile) throws IOException {
+
+        long maxFileSize = 4 * 1024 * 1024;
+
+        if (noticeFile.getSize() > maxFileSize) {
+            throw new MaxUploadSizeExceededException(maxFileSize);
+        }
+
         String originalFileName = noticeFile.getOriginalFilename();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
@@ -53,4 +63,6 @@ public class S3UploadService {
         DeleteObjectRequest request = new DeleteObjectRequest(bucket, file);
         amazonS3.deleteObject(request);
     }
+
+
 }
