@@ -1,12 +1,16 @@
 package dmu.dasom.dasom_homepage.auth.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.dasom.dasom_homepage.auth.filter.CustomAuthenticationFilter;
 import dmu.dasom.dasom_homepage.auth.filter.JwtFilter;
 import dmu.dasom.dasom_homepage.auth.jwt.JwtUtil;
+import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -89,6 +93,8 @@ public class SecurityConfig {
         // http basic 인증 방식 비활성
         http
                 .httpBasic(AbstractHttpConfigurer::disable);
+        http
+                .logout(AbstractHttpConfigurer::disable);
         // 경로별 권한 인가
         http
                 .authorizeHttpRequests((auth) -> auth
@@ -104,7 +110,6 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.POST,
                                         "/recruit").hasAnyRole("BOARD")
                                 .requestMatchers(HttpMethod.GET,
-                                        "/recruit/{recNo}",
                                         "/recruit/{recNo}/applicants/**",
                                         "/admin",
                                         "/admin/**").hasAnyRole("BOARD")
@@ -114,9 +119,26 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.DELETE,
                                         "/recruit",
                                         "/recruit/**").hasAnyRole("BOARD")
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                         // 테스트 시에는 위 모두 주석 처리 후 아래 주석 해제
                         // .anyRequest().permitAll()
+                );
+        http
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(((request, response, authException)
+                                -> {
+                            ApiResponse<String> apiResponse = new ApiResponse<>(false);
+                            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
+                        } ))
+                        .accessDeniedHandler(((request, response, accessDeniedException)
+                                -> {
+                            ApiResponse<String> apiResponse = new ApiResponse<>(false);
+                            response.setStatus(HttpStatus.FORBIDDEN.value());
+                            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                            response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
+                        } ))
                 );
         // 커스텀 필터 등록
         http

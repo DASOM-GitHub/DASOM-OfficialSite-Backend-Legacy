@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/logout")
 public class LogoutController {
 
     private final LogoutService logoutService;
@@ -21,7 +21,7 @@ public class LogoutController {
         this.logoutService = logoutService;
     }
 
-    @PostMapping("/logout")
+    @PostMapping()
     public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request) {
         // 토큰 관련 헤더 데이터 추출 및 로그아웃 처리
         logoutService.logout(request.getHeader("Authorization"));
@@ -30,10 +30,4 @@ public class LogoutController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<ApiResponse<String>> refresh(HttpServletRequest request) {
-        String refreshToken = request.getHeader("Refresh");
-        String newAccessToken = logoutService.refreshToken(refreshToken);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, newAccessToken));
-    }
 }
