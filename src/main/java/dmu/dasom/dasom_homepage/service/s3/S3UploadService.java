@@ -27,11 +27,7 @@ public class S3UploadService {
 
     public String saveFile(MultipartFile noticeFile) throws IOException {
 
-        long maxFileSize = 4 * 1024 * 1024;
 
-        if (noticeFile.getSize() > maxFileSize) {
-            throw new MaxUploadSizeExceededException(maxFileSize);
-        }
 
         String originalFileName = noticeFile.getOriginalFilename();
 
