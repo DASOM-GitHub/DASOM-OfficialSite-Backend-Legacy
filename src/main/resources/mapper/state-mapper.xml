@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.AdminRepository">
+
+    <delete id="deleteMember" parameterType="memberState">
+        DELETE FROM member_table where mem_no = #{memNo}
+    </delete>
+
+    <update id="modifyMember" parameterType="MemberState">
+        UPDATE member_table set mem_department = #{memDepartment} , mem_name = #{memName} , mem_contact = #{memContact}
+        where memno = #{memNO}
+    </update>
+
+    <update id="stateChange" parameterType="MemberState">
+        UPDATE member_table set mem_state = #{memState} where memno = #{memNO}
+    </update>
+
+</mapper>
