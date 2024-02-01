@@ -30,23 +30,36 @@ public class JwtFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
         if (authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-
             return;
         }
 
-        // 헤더 데이터에서 토큰만 추출
-        String token = authorization.split(" ")[1];
+        // 헤더 데이터에서 액세스 토큰만 추출
+        String accessToken = jwtUtil.parseToken(authorization);
 
-        // 토큰 만료 여부 검증
-        if (jwtUtil.isExpired(token)) {
+        if (jwtUtil.isBlacklisted(accessToken)) {
             filterChain.doFilter(request, response);
+            return;
+        }
 
+        // 액세스 토큰 만료 여부 검증
+        if (jwtUtil.isExpired(accessToken)) {
+            String refreshToken = jwtUtil.parseToken(request.getHeader("AuthorizationRefresh"));
+            // 클라이언트의 리프레시 토큰과 Redis 속 리프레시 토큰의 일치 여부 검증
+            if (!jwtUtil.verifyRefreshToken(refreshToken)) {
+                // 리프레시 토큰이 만료되었거나 Redis 속 토큰과 일치하지 않을 경우 401 코드 반환
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+            // 새로운 액세스 토큰을 발급하고 204 코드와 함께 클라이언트로 반환
+            accessToken = jwtUtil.createNewAccessToken(refreshToken);
+            response.setHeader("Authorization", "Bearer " + accessToken);
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return;
         }
 
         // 토큰에서 username(이메일)과 role을 가져옴
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
+        String username = jwtUtil.getUsername(accessToken);
+        String role = jwtUtil.getRole(accessToken);
 
         DasomMember member = new DasomMember();
         member.setMemEmail(username);
