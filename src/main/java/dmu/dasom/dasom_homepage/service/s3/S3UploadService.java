@@ -27,7 +27,8 @@ public class S3UploadService {
 
     public String saveFile(MultipartFile noticeFile) throws IOException {
 
-
+        // 첨부파일(이미지가 없을 경우)
+        if(noticeFile == null) return "";
 
         String originalFileName = noticeFile.getOriginalFilename();
 
@@ -48,6 +49,10 @@ public class S3UploadService {
     }
 
     public void deleteFile(String fileName){
+
+        // 첨부파일(이미지가 없을 경우)
+        if (fileName == null || fileName.equals("")) return;
+
         int index = fileName.indexOf("20");
 
         String file = fileName;

@@ -63,7 +63,7 @@ public class NoticeService {
         NoticeDetailList noticeList = noticeRepository.detailNoticePage(noticeTable.getNoticeNo());
 
         String noticePic = noticeList.getNoticePic();
-
+        
         s3UploadService.deleteFile(noticePic);
 
         String fileName = s3UploadService.saveFile(noticeFile);
