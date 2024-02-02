@@ -43,7 +43,7 @@ public class NoticeService {
     }
 
     // notice 등록
-    public String createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
+    public void createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
         if(isExistsNotice(noticeTable.getNoticeNo()))
             throw new InsertConflictException();
 
@@ -52,7 +52,6 @@ public class NoticeService {
         noticeTable.setNoticePic(fileName);
 
         noticeRepository.createNotice(noticeTable);
-        return "등록 완료";
     }
 
 
