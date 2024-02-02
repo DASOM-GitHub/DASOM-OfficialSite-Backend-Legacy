@@ -49,11 +49,11 @@ public class NoticeController {
 
     // notice 수정
     @PutMapping("/{noticeNo}")
-    public ResponseEntity<ApiResponse<String>> updateNotice(@PathVariable("noticeNo") int noticeNo, @ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+    public ResponseEntity<ApiResponse<Void>> updateNotice(@PathVariable("noticeNo") int noticeNo, @ModelAttribute NoticeTable noticeTable,  @RequestPart("noticeFile") MultipartFile noticeFile) throws Exception {
 
         noticeTable.setNoticeNo(noticeNo);
-
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,noticeService.updateNotice(noticeTable, noticeFile)));
+        noticeService.updateNotice(noticeTable, noticeFile);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
     // notice 삭제
     @DeleteMapping("/{noticeNo}")

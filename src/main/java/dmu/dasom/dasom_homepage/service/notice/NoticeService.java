@@ -56,7 +56,7 @@ public class NoticeService {
 
 
     // notice 수정
-    public String updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
+    public void updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
         if(!isExistsNotice(noticeTable.getNoticeNo()))
             throw new DataNotFoundException();
 
@@ -71,7 +71,7 @@ public class NoticeService {
         noticeTable.setNoticePic(fileName);
 
         noticeRepository.updateNotice(noticeTable);
-        return "게시물 수정이 완료되었습니다";
+
     }
 
 
