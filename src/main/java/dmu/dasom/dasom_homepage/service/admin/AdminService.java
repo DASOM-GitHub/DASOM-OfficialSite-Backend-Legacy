@@ -1,6 +1,7 @@
 package dmu.dasom.dasom_homepage.service.admin;
 
 import dmu.dasom.dasom_homepage.domain.admin.MemberState;
+import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.repository.AdminRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,13 @@ public class AdminService {
     }
 
     // 회원 리스트 반환 메소드
-    public List<MemberState> searchMember(MemberState memberState){
-        return adminRepository.getMemberList();
+    public List<MemberState> searchMember(String memName){
+        List<MemberState> memList =adminRepository.getMemberList(memName);
+        if(memList.isEmpty()){
+            throw new DataNotFoundException();
+        }else{
+            return memList;
+        }
     }
+
 }
