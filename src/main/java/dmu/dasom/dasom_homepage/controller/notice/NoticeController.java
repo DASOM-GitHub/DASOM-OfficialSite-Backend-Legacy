@@ -42,8 +42,8 @@ public class NoticeController {
 
     // notice 등록
     @PostMapping("")
-    public ResponseEntity<ApiResponse<String>> createNoticeTest(@ModelAttribute NoticeTable noticeTable,
-                                                                @RequestPart(value = "noticeFile", required = false) MultipartFile noticeFile) throws Exception {
+    public ResponseEntity<ApiResponse<String>> createNotice(@ModelAttribute NoticeTable noticeTable, @RequestPart(value = "noticeFile", required = false) MultipartFile noticeFile) throws Exception {
+        noticeService.createNotice(noticeTable, noticeFile);
          return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
