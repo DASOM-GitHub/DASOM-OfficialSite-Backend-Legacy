@@ -24,10 +24,12 @@ public class AdminService {
         return "회원 삭제 성공";
     }
     // 화원 정보 수정 메소드
-    public String modify(MemberState memberState) {
-        adminRepository.modifyMember(memberState);
-        return "회원 수정 성공";
-
+    public void modify(int memNo,MemberState memberState) throws Exception {
+        if (adminRepository.existByMemNo(memNo)) {
+            adminRepository.modifyMember(memberState);
+        } else {
+            throw new Exception();
+        }
     }
     // 회원 상태 변경 메소드
     public String stateChange(MemberState memberState) {

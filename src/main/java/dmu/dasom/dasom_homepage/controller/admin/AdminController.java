@@ -27,15 +27,10 @@ public class AdminController {
         return "/admin";
     }
 
-    @GetMapping("/modify")
-    public String modifyForm(MemberState memberState) {
-        return "/modifty-form";
-    }
-
-    @PostMapping("/modify")
-    public String modifyMember(MemberState memberState) {
-        adminService.modify(memberState);
-        return "/admin";
+    @PutMapping("/modify/{memNo}")
+    public ResponseEntity<ApiResponse<Void>> modifyMember(@PathVariable int memNo, @RequestBody MemberState memberState) throws Exception {
+        adminService.modify(memNo,memberState);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
     @PostMapping("/change")
