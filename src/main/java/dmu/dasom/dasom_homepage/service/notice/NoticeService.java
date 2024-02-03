@@ -32,7 +32,9 @@ public class NoticeService {
 
     // 제목 기반 검색
     public List<NoticeList> findNoticeTitle(String noticeTitle) {
-        return noticeRepository.findNoticeTitle(noticeTitle);
+        List<NoticeList> noticeList = noticeRepository.findNoticeTitle(noticeTitle);
+        if(noticeList.isEmpty()) throw new DataNotFoundException();
+        return noticeList;
     }
 
     // 상세 페이지
@@ -76,11 +78,10 @@ public class NoticeService {
 
 
     // notice 삭제
-    public String deleteNotice(int noticeNo){
-        if (noticeRepository.deleteNotice(noticeNo)){
-            return "삭제 되었습니다.";
+    public void deleteNotice(int noticeNo){
+        if (!noticeRepository.deleteNotice(noticeNo)){
+            throw new DataNotFoundException();
         }
-        throw new DataNotFoundException();
     }
 
 

@@ -30,8 +30,8 @@ public class NoticeController {
     }
 
     // notice 제목 기반 조회
-    @GetMapping("/title")
-    public ResponseEntity<ApiResponse<List<NoticeList>>> findNoticeTitle(@RequestParam(value = "title") String noticeTitle) {
+    @PostMapping("/title")
+    public ResponseEntity<ApiResponse<List<NoticeList>>> findNoticeTitle(@RequestBody String noticeTitle) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.findNoticeTitle(noticeTitle)));
     }
     // notice 상세 페이지
@@ -58,7 +58,8 @@ public class NoticeController {
     // notice 삭제
     @DeleteMapping("/{noticeNo}")
     public ResponseEntity<ApiResponse<String>> deleteNotice(@PathVariable("noticeNo") int noticeNo){
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.deleteNotice(noticeNo)));
+        noticeService.deleteNotice(noticeNo);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
 
