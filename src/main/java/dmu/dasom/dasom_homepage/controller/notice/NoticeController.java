@@ -41,17 +41,19 @@ public class NoticeController {
     }
 
     // notice 등록
-    @PostMapping("/create")
-    public String createNoticeTest(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
-
-        return noticeService.createNotice(noticeTable, noticeFile);
+    @PostMapping("")
+    public ResponseEntity<ApiResponse<Void>> createNotice(@ModelAttribute NoticeTable noticeTable, @RequestPart(value = "noticeFile", required = false) MultipartFile noticeFile) throws Exception {
+        noticeService.createNotice(noticeTable, noticeFile);
+         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
     // notice 수정
-    @PostMapping("/update")
-    public String updateNotice(@ModelAttribute NoticeTable noticeTable, @RequestParam(value = "noticeFile") MultipartFile noticeFile) throws Exception {
+    @PutMapping("/{noticeNo}")
+    public ResponseEntity<ApiResponse<Void>> updateNotice(@PathVariable("noticeNo") int noticeNo, @ModelAttribute NoticeTable noticeTable,  @RequestPart(value = "noticeFile", required = false) MultipartFile noticeFile) throws Exception {
 
-        return noticeService.updateNotice(noticeTable, noticeFile);
+        noticeTable.setNoticeNo(noticeNo);
+        noticeService.updateNotice(noticeTable, noticeFile);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
     // notice 삭제
     @DeleteMapping("/{noticeNo}")

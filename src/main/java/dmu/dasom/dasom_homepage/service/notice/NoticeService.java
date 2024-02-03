@@ -4,6 +4,7 @@ import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
+import dmu.dasom.dasom_homepage.exception.InsertConflictException;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import dmu.dasom.dasom_homepage.service.s3.S3UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,28 +43,35 @@ public class NoticeService {
     }
 
     // notice 등록
-    public String createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
+    public void createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
+        if(isExistsNotice(noticeTable.getNoticeNo()))
+            throw new InsertConflictException();
 
-        String fileName = saveFile(noticeFile);
+        String fileName = s3UploadService.saveFile(noticeFile);
 
         noticeTable.setNoticePic(fileName);
 
         noticeRepository.createNotice(noticeTable);
-        return "등록 완료";
     }
 
 
     // notice 수정
-    public String updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
+    public void updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
         if(!isExistsNotice(noticeTable.getNoticeNo()))
-            return "해당 게시물은 존재하지 않습니다";
+            throw new DataNotFoundException();
 
-        String fileName = saveFile(noticeFile);
+        NoticeDetailList noticeList = noticeRepository.detailNoticePage(noticeTable.getNoticeNo());
+
+        String noticePic = noticeList.getNoticePic();
+        
+        s3UploadService.deleteFile(noticePic);
+
+        String fileName = s3UploadService.saveFile(noticeFile);
 
         noticeTable.setNoticePic(fileName);
 
         noticeRepository.updateNotice(noticeTable);
-        return "게시물 수정이 완료되었습니다";
+
     }
 
 
@@ -75,11 +83,6 @@ public class NoticeService {
         throw new DataNotFoundException();
     }
 
-    // 파일 저장 및 저장된 파일 경로 반환
-    public String saveFile(MultipartFile noticeFile) throws Exception{
-
-        return s3UploadService.saveFile(noticeFile);
-    }
 
     // 해당 게시물이 존재하는지 무결성 검사
     public Boolean isExistsNotice(int noticeNo){
