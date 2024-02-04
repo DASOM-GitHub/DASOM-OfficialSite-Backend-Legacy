@@ -20,5 +20,21 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeList" alias="NoticeList"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList" alias="NoticeDetailList"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeTable" alias="NoticeTable" />
-    </typeAliases>
+
+    
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Project" alias="Project"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Study" alias="Study"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.ProjectList" alias="ProjectList"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.StudyList" alias="StudyList"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.ProjectParticipants" alias="ProjectParticipants"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.StudyParticipants" alias="StudyParticipants"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Role" alias="Role"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Category" alias="Category"/>
+	
+	</typeAliases>
+<!--    <mappers>-->
+<!--        <mapper class="dmu.dasom.dasom_homepage.repository.RecruitRepository" />-->
+<!--        <mapper class="dmu.dasom.dasom_homepage.repository.ProjectRepository" />-->
+<!--        <mapper class="dmu.dasom.dasom_homepage.repository.StudyRepository" />-->
+<!--    </mappers>-->
 </configuration>
