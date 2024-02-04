@@ -46,7 +46,7 @@ public class MyPageController {
 
     // 마이페이지 자신의 프로필 사진 업데이트
     @PatchMapping("/my-page")
-    public ResponseEntity<ApiResponse<Void>> updateMemProfilePic(@RequestBody MultipartFile profilePic, HttpServletRequest request) throws IOException {
+    public ResponseEntity<ApiResponse<Void>> updateMemProfilePic(@RequestPart MultipartFile profilePic, HttpServletRequest request) throws IOException {
         myPageService.updateMemProfilePic(profilePic, request.getHeader("Authorization"));
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }

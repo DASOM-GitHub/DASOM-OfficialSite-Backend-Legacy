@@ -15,7 +15,7 @@ public class DasomMember {
     private String memName;
     private int memGrade;
     private String memDepartment;
-    private int memRecNo; // 수동 입력 처리 해야
+    private int memRecNo;
     private String memSocialId;
     private String memSocialEmail;
     private String memProfilePic;
