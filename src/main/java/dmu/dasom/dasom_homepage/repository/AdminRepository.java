@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdminRepository {
 
     Boolean existByMemNo(int memNo);
-    void deleteMember(MemberState memberState);
+    void deleteMember(int memNo);
 
     void modifyMember(MemberState memberState);
 

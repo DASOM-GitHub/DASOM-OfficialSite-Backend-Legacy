@@ -20,23 +20,25 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PostMapping("/delete")
-    public String delteMember(MemberState memberState) {
-        adminService.delete(memberState);
-        // admin 페이지로 이동
-        return "/admin";
-    }
-
+    //회원 정보 수정
     @PutMapping("/modify/{memNo}")
     public ResponseEntity<ApiResponse<Void>> modifyMember(@PathVariable int memNo, @RequestBody MemberState memberState) throws Exception {
         adminService.modify(memNo,memberState);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
+    //회원 정보 삭제
+    @DeleteMapping("/delete/{recNo}")
+    public ResponseEntity<ApiResponse<Void>> deleteMember(@PathVariable int memNo){
+        adminService.delete(memNo);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
+    }
 
-    @PostMapping("/change")
-    public String stateChangeMember(MemberState memberState) {
-        adminService.stateChange(memberState);
-        return "/admin";
+    //회원 상태 수정
+
+    @PutMapping("/change/{memNo}")
+    public ResponseEntity<ApiResponse<Void>> stateChangeMember(@PathVariable int memNo, @RequestBody MemberState memberState) {
+        adminService.stateChange(memNo,memberState);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
     //회원 이름 검색 리스트
     @GetMapping("/search")

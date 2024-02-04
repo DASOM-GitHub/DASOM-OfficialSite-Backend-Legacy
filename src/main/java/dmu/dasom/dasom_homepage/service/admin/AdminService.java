@@ -3,6 +3,7 @@ package dmu.dasom.dasom_homepage.service.admin;
 import dmu.dasom.dasom_homepage.domain.admin.MemberState;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.repository.AdminRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,17 +14,17 @@ import java.util.List;
 public class AdminService {
     private final AdminRepository adminRepository;
 
+    @Autowired
     public AdminService(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
-    // 회원 삭제 메소드
-    public String delete(MemberState memberState) {
-        //memberState.getNo; // 나중에 만들어질 member_table의 pk값
-        memberState.setMemNo(1);
-        adminRepository.deleteMember(memberState);
-        return "회원 삭제 성공";
+
+    //회원 삭제 메소드
+    public void delete(int memNo){
+        adminRepository.deleteMember(memNo);
     }
-    // 화원 정보 수정 메소드
+
+    // 회원 정보 수정 메소드
     public void modify(int memNo,MemberState memberState) throws Exception {
         if (adminRepository.existByMemNo(memNo)) {
             adminRepository.modifyMember(memberState);
@@ -31,10 +32,11 @@ public class AdminService {
             throw new Exception();
         }
     }
+
     // 회원 상태 변경 메소드
-    public String stateChange(MemberState memberState) {
+    public void stateChange(int memNo,MemberState memberState) {
+        memberState.setMemNo(memNo);
         adminRepository.stateChange(memberState);
-        return "회원 상태 변경 성공";
     }
 
     // 회원 리스트 반환 메소드
