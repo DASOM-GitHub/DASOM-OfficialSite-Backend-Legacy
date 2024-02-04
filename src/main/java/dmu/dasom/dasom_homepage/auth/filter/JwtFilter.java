@@ -43,7 +43,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // 액세스 토큰 만료 여부 검증
         if (jwtUtil.isExpired(accessToken)) {
-            String refreshToken = jwtUtil.parseToken(request.getHeader("AuthorizationRefresh"));
+            String authorizationRefresh = request.getHeader("AuthorizationRefresh");
+            if (authorizationRefresh == null || !authorizationRefresh.startsWith("Bearer ")) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+            String refreshToken = jwtUtil.parseToken(authorizationRefresh);
             // 클라이언트의 리프레시 토큰과 Redis 속 리프레시 토큰의 일치 여부 검증
             if (!jwtUtil.verifyRefreshToken(refreshToken)) {
                 // 리프레시 토큰이 만료되었거나 Redis 속 토큰과 일치하지 않을 경우 401 코드 반환

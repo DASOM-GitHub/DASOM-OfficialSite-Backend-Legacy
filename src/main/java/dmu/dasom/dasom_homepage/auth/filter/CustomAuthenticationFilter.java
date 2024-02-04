@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -50,6 +51,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
             // token 검증을 위해 AuthenticationManager로 전달
             return authenticationManager.authenticate(authToken);
+        } catch (InternalAuthenticationServiceException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

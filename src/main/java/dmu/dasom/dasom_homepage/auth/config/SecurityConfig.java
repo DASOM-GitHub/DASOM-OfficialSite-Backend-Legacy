@@ -8,14 +8,16 @@ import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,6 +32,7 @@ import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -50,9 +53,15 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
-        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_PRESIDENT > ROLE_BOARD > ROLE_GROUPLEADER > ROLE_MEMBER");
-
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_PRESIDENT > ROLE_MANAGER > ROLE_GROUPLEADER > ROLE_MEMBER");
         return hierarchy;
+    }
+
+    @Bean
+    public MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy) {
+        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy);
+        return expressionHandler;
     }
 
     // 비밀번호 암호화 및 대조 역할
@@ -95,34 +104,6 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable);
         http
                 .logout(AbstractHttpConfigurer::disable);
-        // 경로별 권한 인가
-        http
-                .authorizeHttpRequests((auth) -> auth
-                                .requestMatchers(HttpMethod.POST,
-                                        "/recruit/{recNo}/applicants",
-                                        "/signup",
-                                        "/signup/verify",
-                                        "/login",
-                                        "/auth/logout").permitAll()
-                                .requestMatchers(HttpMethod.GET,
-                                        "/recruit",
-                                        "/recruit/{recNo}").permitAll()
-                                .requestMatchers(HttpMethod.POST,
-                                        "/recruit").hasAnyRole("BOARD")
-                                .requestMatchers(HttpMethod.GET,
-                                        "/recruit/{recNo}/applicants/**",
-                                        "/admin",
-                                        "/admin/**").hasAnyRole("BOARD")
-                                .requestMatchers(HttpMethod.PUT,
-                                        "/recruit",
-                                        "/recruit/**").hasAnyRole("BOARD")
-                                .requestMatchers(HttpMethod.DELETE,
-                                        "/recruit",
-                                        "/recruit/**").hasAnyRole("BOARD")
-                                .anyRequest().permitAll()
-                        // 테스트 시에는 위 모두 주석 처리 후 아래 주석 해제
-                        // .anyRequest().permitAll()
-                );
         http
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(((request, response, authException)
