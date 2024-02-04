@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/member")
 public class AdminController {
     private final AdminService adminService;
 
@@ -19,7 +19,11 @@ public class AdminController {
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
-
+    //회원 리스트 가져오기 (main)
+    @GetMapping()
+    public ResponseEntity<ApiResponse<List<MemberState>>> getMemberList(){
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,adminService.getMemberList()));
+    }
     //회원 정보 수정
     @PutMapping("/modify/{memNo}")
     public ResponseEntity<ApiResponse<Void>> modifyMember(@PathVariable int memNo, @RequestBody MemberState memberState) throws Exception {

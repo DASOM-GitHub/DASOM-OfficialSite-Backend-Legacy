@@ -19,6 +19,15 @@ public class AdminService {
         this.adminRepository = adminRepository;
     }
 
+    //회원 리스트 반환
+    public List<MemberState> getMemberList(){
+        List<MemberState> memberList = adminRepository.getMemberListAll();
+        if(memberList.isEmpty()){
+            throw new DataNotFoundException();
+        }else{
+            return memberList;
+        }
+    }
     //회원 삭제 메소드
     public void delete(int memNo){
         adminRepository.deleteMember(memNo);
@@ -39,7 +48,7 @@ public class AdminService {
         adminRepository.stateChange(memberState);
     }
 
-    // 회원 리스트 반환 메소드
+    // 회원 검색 결과 리스트 반환 메소드
     public List<MemberState> searchMember(String memName){
         List<MemberState> memList =adminRepository.getMemberList(memName);
         if(memList.isEmpty()){

@@ -16,6 +16,7 @@ public interface AdminRepository {
     void modifyMember(MemberState memberState);
 
     void stateChange(MemberState memberState);
+    List<MemberState> getMemberListAll();
     List<MemberState> getMemberList(String memName);
 
 }

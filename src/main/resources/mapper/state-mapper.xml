@@ -12,10 +12,13 @@
     </update>
 
     <update id="stateChange" parameterType="MemberState">
-        UPDATE member_table set mem_state = #{memState} where memno = #{memNO}
+        UPDATE member_table set mem_state = #{memState} where memno = #{memNo}
     </update>
 
+    <select id="getMemberListAll" resultType="MemberState">
+        SELECT mem_no, mem_naem, mem_state FROM  member_table;
+    </select>
     <select id="getMemberList" resultType="MemberState">
-        SELECT mem_no, mem_name, mem_state FROM member_table
+        SELECT mem_no, mem_name, mem_state FROM member_table WHERE mem_no = #{memNo};
     </select>
 </mapper>
