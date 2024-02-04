@@ -2,6 +2,7 @@ package dmu.dasom.dasom_homepage.exception.handler;
 
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.exception.InsertConflictException;
+import dmu.dasom.dasom_homepage.exception.ProjectException;
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ApiResponse<Void>> handleDataNotFoundException(DataNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false));
+    }
+
+    @ExceptionHandler(ProjectException.class)
+    public ResponseEntity<ApiResponse<Void>> handleProjectException(ProjectException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false));
     }
 }
