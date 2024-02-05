@@ -30,22 +30,30 @@ public class AdminService {
     }
     //회원 삭제 메소드
     public void delete(int memNo){
-        adminRepository.deleteMember(memNo);
+        if (adminRepository.existByMemNo(memNo)) {
+            adminRepository.deleteMember(memNo);
+        } else {
+            throw new DataNotFoundException();
+        }
     }
 
     // 회원 정보 수정 메소드
-    public void modify(int memNo,MemberState memberState) throws Exception {
+    public void modify(int memNo,MemberState memberState)  {
         if (adminRepository.existByMemNo(memNo)) {
             adminRepository.modifyMember(memberState);
         } else {
-            throw new Exception();
+            throw new DataNotFoundException();
         }
     }
 
     // 회원 상태 변경 메소드
     public void stateChange(int memNo,MemberState memberState) {
-        memberState.setMemNo(memNo);
-        adminRepository.stateChange(memberState);
+        if (adminRepository.existByMemNo((memNo))) {
+            memberState.setMemNo(memNo);
+            adminRepository.stateChange(memberState);
+        } else {
+            throw new DataNotFoundException();
+        }
     }
 
     // 회원 검색 결과 리스트 반환 메소드
