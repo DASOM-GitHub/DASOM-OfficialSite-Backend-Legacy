@@ -7,8 +7,8 @@
     </select>
 
     <insert id="createProject" parameterType="Project">
-        INSERT INTO project_table(project_no, writer_no, organizer_no, project_title, project_content, project_category, project_pic, start_date, end_date)
-        VALUES(#{projectNo}, #{writerNo}, #{organizerNo}, #{projectTitle}, #{projectContent}, #{projectCategory}, #{projectPic}, #{startDate}, #{endDate})
+        INSERT INTO project_table(writer_no, organizer_no, project_title, project_content, project_category, project_pic, start_date, end_date)
+        VALUES(#{writerNo}, #{organizerNo}, #{projectTitle}, #{projectContent}, #{projectCategory}, #{projectPic}, #{startDate}, #{endDate})
     </insert>
 
     <update id="editProject" parameterType="Project">
@@ -37,58 +37,30 @@
         WHERE project_no = #{projectNo}
     </select>
 
-    <delete id="removeParticipant" parameterType="ProjectParticipants">
+    <delete id="removeParticipant">
         DELETE FROM project_participants
         WHERE project_no = #{projectNo} and participant_no = #{participantNo}
     </delete>
 
     <insert id="addParticipant" parameterType="ProjectParticipants">
-<!--        insert into project_participants-->
-<!--        valuse ( #{project_no}, #{participant_no}, #{participant_role})-->
         insert into project_participants
         values (#{projectNo}, #{participantNo}, #{participantRole})
     </insert>
 
-    <select id="getParticipant" parameterType="ProjectParticipants" resultType="ProjectParticipants">
+    <select id="getParticipant" resultType="ProjectParticipants">
         SELECT *
         FROM project_participants
         WHERE project_no = #{projectNo} and participant_no = #{participantNo}
     </select>
 
     <!-- category | role 부분-->
-    <insert id="addCategory" parameterType="Category">
-        insert into study_project_category
-        values (#{categoryName}, #{categoryDescription})
-    </insert>
-    <delete id="removeCategory" parameterType="String">
-        delete from study_project_category
-        where category_name = #{categoryName}
-    </delete>
     <select id="getCategoryByName" parameterType="String" resultType="Category">
         select * from study_project_category
         where category_name = #{categoryName}
     </select>
-    <select id="getProjectsNumByCategory" resultType="int" parameterType="String">
-        select count(*)
-        from project_table
-        where project_category = #{categoryName}
-    </select>
 
-    <insert id="addRole" parameterType="Role">
-        insert into study_project_role
-        values (#{roleName}, #{roleDescription})
-    </insert>
-    <delete id="removeRole" parameterType="String">
-        delete from study_project_role
-        where role_name = #{role_name}
-    </delete>
     <select id="getRoleByName" parameterType="String" resultType="Role">
         select * from study_project_role
-        where role_name = #{role_name}
-    </select>
-    <select id="getParticipantsNumByRole" resultType="int" parameterType="String">
-        select count(*)
-        from project_participants
-        where participant_role = #{role_name}
+        where role_name = #{roleName}
     </select>
 </mapper>

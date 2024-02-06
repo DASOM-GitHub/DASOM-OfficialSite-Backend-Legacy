@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ProjectForm {
-    @GetMapping("/project-form")
+    @GetMapping("/board/project-form")
     public String projectForm(){
         return "/project-form";
     }

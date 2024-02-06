@@ -92,30 +92,30 @@ public class SecurityConfig {
         // 경로별 권한 인가
         http
                 .authorizeHttpRequests((auth) -> auth
-                                .requestMatchers(HttpMethod.POST,
-                                        "/recruit/{recNo}/applicants",
-                                        "/signup",
-                                        "/signup/verify",
-                                        "/login").permitAll()
-                                .requestMatchers(HttpMethod.GET,
-                                        "/recruit",
-                                        "/recruit/{recNo}").permitAll()
-                                .requestMatchers(HttpMethod.POST,
-                                        "/recruit").hasAnyRole("BOARD")
-                                .requestMatchers(HttpMethod.GET,
-                                        "/recruit/{recNo}",
-                                        "/recruit/{recNo}/applicants/**",
-                                        "/admin",
-                                        "/admin/**").hasAnyRole("BOARD")
-                                .requestMatchers(HttpMethod.PUT,
-                                        "/recruit",
-                                        "/recruit/**").hasAnyRole("BOARD")
-                                .requestMatchers(HttpMethod.DELETE,
-                                        "/recruit",
-                                        "/recruit/**").hasAnyRole("BOARD")
-                                .anyRequest().authenticated()
+//                                .requestMatchers(HttpMethod.POST,
+//                                        "/recruit/{recNo}/applicants",
+//                                        "/signup",
+//                                        "/signup/verify",
+//                                        "/login").permitAll()
+//                                .requestMatchers(HttpMethod.GET,
+//                                        "/recruit",
+//                                        "/recruit/{recNo}").permitAll()
+//                                .requestMatchers(HttpMethod.POST,
+//                                        "/recruit").hasAnyRole("BOARD")
+//                                .requestMatchers(HttpMethod.GET,
+//                                        "/recruit/{recNo}",
+//                                        "/recruit/{recNo}/applicants/**",
+//                                        "/admin",
+//                                        "/admin/**").hasAnyRole("BOARD")
+//                                .requestMatchers(HttpMethod.PUT,
+//                                        "/recruit",
+//                                        "/recruit/**").hasAnyRole("BOARD")
+//                                .requestMatchers(HttpMethod.DELETE,
+//                                        "/recruit",
+//                                        "/recruit/**").hasAnyRole("BOARD")
+//                                .anyRequest().authenticated()
                         // 테스트 시에는 위 모두 주석 처리 후 아래 주석 해제
-                        // .anyRequest().permitAll()
+                         .anyRequest().permitAll()
                 );
         // 커스텀 필터 등록
         http
