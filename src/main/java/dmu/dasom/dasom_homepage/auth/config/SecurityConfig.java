@@ -115,7 +115,7 @@ public class SecurityConfig {
 //                                        "/recruit/**").hasAnyRole("BOARD")
 //                                .anyRequest().authenticated()
                         // 테스트 시에는 위 모두 주석 처리 후 아래 주석 해제
-                         .anyRequest().permitAll()
+                        .anyRequest().permitAll()
                 );
         // 커스텀 필터 등록
         http
