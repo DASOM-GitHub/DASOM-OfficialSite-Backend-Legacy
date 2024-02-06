@@ -26,7 +26,7 @@ public class StudyController {
 
     //수정하기
     @PutMapping()
-    public ResponseEntity<ApiResponse<Void>> edit(@ModelAttribute Study study, @RequestParam(value = "studyFile") MultipartFile studyFile) throws IOException {
+    public ResponseEntity<ApiResponse<Void>> edit(@ModelAttribute Study study, @RequestPart(value = "studyFile") MultipartFile studyFile) throws IOException {
         studyService.editStudy(study, studyFile);
         // 추후 ioException 수정 필요 -> handler추가 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));

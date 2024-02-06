@@ -14,7 +14,10 @@ public interface StudyRepository {
     List<StudyList> getStudys();
 
     // 수정 : 존재 유무 확인 select | 해당 study 상세페이지
-    Study findStudyById(int study_no);
+    Study findStudyById(int studyNo);
+
+    // 프로젝트 존재 여부 확인
+    Boolean isStudyExistById(int studyNo);
 
     // 생성
     void createStudy(Study study);
@@ -23,16 +26,17 @@ public interface StudyRepository {
     void editStudy(Study study);
 
     // 삭제 : delete
-    void removeStudy(int study_no);
+    void removeStudy(int project_no);
 
     // ---------------부원 부분---------------
 
     //특정 study에서 부원 list 반환 | 해당 프로젝트의 참가자들 반환
-    List<StudyParticipants> getParticipants(int study_no);
+    List<StudyParticipants> getParticipants(int project_no);
+
     void removeParticipant(@Param("studyNo")int studyNo, @Param("participantNo")int participantNo);
     void addParticipant(StudyParticipants studyParcitipants);
     //해당 부원의 존재를 확인하기 위한 부원 반환
-    StudyParticipants getParticipant(@Param("studyNo")int studyNo, @Param("participantNo")int participantNo);
+    Boolean isParticipant(@Param("studyNo")int studyNo, @Param("participantNo")int participantNo);
 
     //---------category | role ----------
     Category getCategoryByName(String categoryName);

@@ -59,7 +59,9 @@ public class ProjectService {
         if (!isProjectExistById(project.getProjectNo()))
             //수정할 project를 찾을수 없음
             throw new DataNotFoundException();
-
+        //이전 파일 삭제
+        String oldFile = projectRepository.findProjectById(project.getProjectNo()).getProjectPic();
+        s3UploadService.deleteFile(oldFile);
         // 수정
         String fileUrl = s3UploadService.saveFile(projectFile);
         project.setProjectPic(fileUrl);
@@ -72,7 +74,9 @@ public class ProjectService {
         if (!isProjectExistById(projectNo))
             //삭제할 project를 찾을 수 없음
             throw new DataNotFoundException();
-
+        //이전 파일 삭제
+        String oldFile = projectRepository.findProjectById(projectNo).getProjectPic();
+        s3UploadService.deleteFile(oldFile);
         projectRepository.removeProject(projectNo);
     }
 
