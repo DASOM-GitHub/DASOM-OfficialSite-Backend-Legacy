@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
@@ -33,9 +32,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LogoutErrorException.class)
     public ResponseEntity<ApiResponse<Void>> handleLogoutErrorException(LogoutErrorException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false));
+    }
   
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+//    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public ResponseEntity<ApiResponse<Void>> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(new ApiResponse<>(false));
@@ -44,5 +45,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProjectException.class)
     public ResponseEntity<ApiResponse<Void>> handleProjectException(ProjectException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false));
+    }
+
+    @ExceptionHandler(UniqueCodeExpiredException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUniqueCodeExpiredException(UniqueCodeExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new ApiResponse<>(false));
     }
 }
