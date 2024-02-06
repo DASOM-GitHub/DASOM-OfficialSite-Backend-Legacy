@@ -21,4 +21,5 @@ public class NoticeTable {
     private String noticePic;
 
 
+
 }
