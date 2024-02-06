@@ -19,31 +19,34 @@ public class AdminController {
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
+
     //회원 리스트 가져오기 (main)
     @GetMapping()
     public ResponseEntity<ApiResponse<List<MemberState>>> getMemberList(){
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,adminService.getMemberList()));
     }
+
     //회원 정보 수정
     @PutMapping("/{memNo}")
-    public ResponseEntity<ApiResponse<Void>> modifyMember(@PathVariable int memNo, @RequestBody MemberState memberState) throws Exception {
+    public ResponseEntity<ApiResponse<Void>> modifyMember(@PathVariable int memNo, @RequestBody MemberState memberState) {
         adminService.modify(memNo,memberState);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
+
     //회원 정보 삭제
-    @DeleteMapping("/{recNo}")
+    @DeleteMapping("/{memNo}")
     public ResponseEntity<ApiResponse<Void>> deleteMember(@PathVariable int memNo){
         adminService.delete(memNo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
     //회원 상태 수정
-
     @PatchMapping("/{memNo}")
     public ResponseEntity<ApiResponse<Void>> stateChangeMember(@PathVariable int memNo, @RequestBody MemberState memberState) {
         adminService.stateChange(memNo,memberState);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
+
     //회원 이름 검색 리스트
     @GetMapping("/{memName}")
     public ResponseEntity<ApiResponse<List<MemberState>>> searchMember(@PathVariable String memName) {

@@ -9,7 +9,11 @@ import org.springframework.stereotype.Repository;
 public interface SignupRepository {
     Boolean isNewMemberExistByCode(String uniqueCode);
 
+    Boolean isUniqueCodeExpired(String uniqueCode);
+
     Boolean existByEmail(String memEmail);
 
     void saveNewMember(DasomMember dasomMember);
+
+    void expireUniqueCode(String uniqueCode);
 }

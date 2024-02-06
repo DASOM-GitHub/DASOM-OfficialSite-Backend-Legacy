@@ -1,9 +1,8 @@
-package dmu.dasom.dasom_homepage.domain.notice;
+package dmu.dasom.dasom_homepage.domain.board.notice;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @Getter @Setter

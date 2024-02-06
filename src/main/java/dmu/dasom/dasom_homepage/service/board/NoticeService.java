@@ -1,8 +1,8 @@
-package dmu.dasom.dasom_homepage.service.notice;
+package dmu.dasom.dasom_homepage.service.board;
 
-import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
-import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
-import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeDetailList;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeList;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.exception.InsertConflictException;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
@@ -17,11 +17,13 @@ import java.util.Optional;
 @Service
 public class NoticeService {
     private final NoticeRepository noticeRepository;
-
-    public NoticeService(NoticeRepository noticeRepository) { this.noticeRepository = noticeRepository; }
+    private final S3UploadService s3UploadService;
 
     @Autowired
-    private S3UploadService s3UploadService;
+    public NoticeService(NoticeRepository noticeRepository, S3UploadService s3UploadService) {
+        this.noticeRepository = noticeRepository;
+        this.s3UploadService = s3UploadService;
+    }
 
     // notice 조회
     public List<NoticeList> findNoticeDateDesc() {

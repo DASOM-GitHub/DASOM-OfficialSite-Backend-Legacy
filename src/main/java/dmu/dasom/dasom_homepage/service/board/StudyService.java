@@ -1,6 +1,6 @@
-package dmu.dasom.dasom_homepage.service.admin;
+package dmu.dasom.dasom_homepage.service.board;
 
-import dmu.dasom.dasom_homepage.domain.admin.*;
+import dmu.dasom.dasom_homepage.domain.board.project_study.*;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.exception.InsertConflictException;
 import dmu.dasom.dasom_homepage.exception.ProjectException;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class StudyService {
     private final StudyRepository studyRepository;
-    private S3UploadService s3UploadService;
+    private final S3UploadService s3UploadService;
 
     @Autowired
     public StudyService(StudyRepository studyRepository, S3UploadService s3UploadService){

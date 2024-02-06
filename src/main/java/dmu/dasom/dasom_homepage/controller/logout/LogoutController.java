@@ -1,4 +1,4 @@
-package dmu.dasom.dasom_homepage.controller.signin;
+package dmu.dasom.dasom_homepage.controller.logout;
 
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import dmu.dasom.dasom_homepage.service.logout.LogoutService;

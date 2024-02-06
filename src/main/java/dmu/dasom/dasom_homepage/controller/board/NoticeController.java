@@ -1,11 +1,10 @@
-package dmu.dasom.dasom_homepage.controller.notice;
+package dmu.dasom.dasom_homepage.controller.board;
 
-import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
-import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
-import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
-import dmu.dasom.dasom_homepage.domain.recruit.DasomApplicantIndex;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeDetailList;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeList;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
-import dmu.dasom.dasom_homepage.service.notice.NoticeService;
+import dmu.dasom.dasom_homepage.service.board.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

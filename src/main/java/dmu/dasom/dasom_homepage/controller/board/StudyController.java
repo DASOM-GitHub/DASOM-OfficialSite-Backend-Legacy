@@ -1,12 +1,10 @@
-package dmu.dasom.dasom_homepage.controller.admin;
+package dmu.dasom.dasom_homepage.controller.board;
 
-import dmu.dasom.dasom_homepage.domain.admin.*;
-import dmu.dasom.dasom_homepage.exception.DataAlreadyExistException;
-import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
+import dmu.dasom.dasom_homepage.domain.board.project_study.Study;
+import dmu.dasom.dasom_homepage.domain.board.project_study.StudyList;
+import dmu.dasom.dasom_homepage.domain.board.project_study.StudyParticipants;
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
-import dmu.dasom.dasom_homepage.service.admin.ProjectService;
-import dmu.dasom.dasom_homepage.restful.ApiResponse;
-import dmu.dasom.dasom_homepage.service.admin.StudyService;
+import dmu.dasom.dasom_homepage.service.board.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +26,7 @@ public class StudyController {
 
     //수정하기
     @PutMapping()
-    public ResponseEntity<ApiResponse> edit(@ModelAttribute Study study, @RequestParam(value = "studyFile") MultipartFile studyFile) throws IOException {
+    public ResponseEntity<ApiResponse<Void>> edit(@ModelAttribute Study study, @RequestParam(value = "studyFile") MultipartFile studyFile) throws IOException {
         studyService.editStudy(study, studyFile);
         // 추후 ioException 수정 필요 -> handler추가 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
@@ -36,7 +34,7 @@ public class StudyController {
 
     @GetMapping()
     // 모든 유저가 /study에 접근시 study 내용 반환
-    public ResponseEntity<ApiResponse<List<StudyList>>> getStudys(){
+    public ResponseEntity<ApiResponse<List<StudyList>>> getStudies(){
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, studyService.getStudys()));
     }
 
@@ -50,7 +48,7 @@ public class StudyController {
 
     @PostMapping()
     // study 추가 생성
-    public ResponseEntity<ApiResponse> create(@ModelAttribute Study study, @RequestParam(value = "studyFile") MultipartFile studyFile) throws IOException {
+    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Study study, @RequestParam(value = "studyFile") MultipartFile studyFile) throws IOException {
         studyService.createStudy(study, studyFile);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -60,7 +58,7 @@ public class StudyController {
 
     @DeleteMapping("/{studyNo}")
     //admin 유저가 삭제
-    public ResponseEntity<ApiResponse> remove(@PathVariable("studyNo") int studyNo) {
+    public ResponseEntity<ApiResponse<Void>> remove(@PathVariable("studyNo") int studyNo) {
         studyService.removeStudy(studyNo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
@@ -75,7 +73,7 @@ public class StudyController {
 
     //특정 study에서 부원 추가하기
     @PostMapping("/{studyNo}/participants")
-    public ResponseEntity<ApiResponse> addParticipants(@PathVariable("studyNo") int studyNo,@ModelAttribute StudyParticipants studyParticipants) {//@ModelAttribute Role role
+    public ResponseEntity<ApiResponse<Void>> addParticipants(@PathVariable("studyNo") int studyNo,@ModelAttribute StudyParticipants studyParticipants) {//@ModelAttribute Role role
         studyParticipants.setStudyNo(studyNo);
         studyService.addParticipant(studyParticipants);
 
@@ -84,7 +82,7 @@ public class StudyController {
 
     //부원 삭제하기
     @DeleteMapping("/{studyNo}/participants/{participantNo}")
-    public ResponseEntity<ApiResponse> removeParticipants(@PathVariable("studyNo") int studyNo,@PathVariable("participantNo") int participantNo) {
+    public ResponseEntity<ApiResponse<Void>> removeParticipants(@PathVariable("studyNo") int studyNo,@PathVariable("participantNo") int participantNo) {
         studyService.removeParticipant(studyNo, participantNo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
