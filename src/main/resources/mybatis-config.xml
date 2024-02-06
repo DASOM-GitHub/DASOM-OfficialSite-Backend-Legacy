@@ -21,7 +21,7 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList" alias="NoticeDetailList"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.notice.NoticeTable" alias="NoticeTable" />
 
-<typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Project" alias="Project"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Project" alias="Project"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.Study" alias="Study"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.ProjectList" alias="ProjectList"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.StudyList" alias="StudyList"/>

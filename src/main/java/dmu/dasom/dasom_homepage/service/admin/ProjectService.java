@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 public class ProjectService {
@@ -113,7 +114,6 @@ public class ProjectService {
     }
 
     public void addParticipant(ProjectParticipants projectParticipants) {
-
         if (!isProjectById(projectParticipants.getProjectNo())) {
             // project가 없을시
             throw new DataNotFoundException();

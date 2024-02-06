@@ -30,6 +30,7 @@ public interface ProjectRepository {
 
     //특정 project에서 부원 list 반환 | 해당 프로젝트의 참가자들 반환
     List<ProjectParticipants> getParticipants(int project_no);
+
     void removeParticipant(@Param("projectNo")int projectNo, @Param("participantNo")int participantNo);
     void addParticipant(ProjectParticipants projectParcitipants);
     //해당 부원의 존재를 확인하기 위한 부원 반환

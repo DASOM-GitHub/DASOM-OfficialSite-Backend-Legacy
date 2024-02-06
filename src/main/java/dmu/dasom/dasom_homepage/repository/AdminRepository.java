@@ -9,11 +9,14 @@ import java.util.List;
 @Mapper
 @Repository
 public interface AdminRepository {
-    void deleteMember(MemberState memberState);
+
+    Boolean existByMemNo(int memNo);
+    void deleteMember(int memNo);
 
     void modifyMember(MemberState memberState);
 
     void stateChange(MemberState memberState);
-    List<MemberState> getMemberList();
+    List<MemberState> getMemberListAll();
+    List<MemberState> getMemberList(String memName);
 
 }
