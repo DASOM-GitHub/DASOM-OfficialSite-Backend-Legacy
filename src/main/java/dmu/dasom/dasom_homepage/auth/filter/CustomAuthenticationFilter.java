@@ -46,6 +46,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String username = loginDTO.getUsername();
             String password = loginDTO.getPassword();
 
+            // 동시 로그인을 방지하기 위해 사용자의 기존 토큰을 만료 시킴
+            if (Boolean.TRUE.equals(redisTemplate.hasKey("ACCESS_TOKEN_" + username)))
+                jwtUtil.expireToken(redisTemplate.opsForValue().get("ACCESS_TOKEN_" + username));
+
             // 검증을 위해 token으로 만듦
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 

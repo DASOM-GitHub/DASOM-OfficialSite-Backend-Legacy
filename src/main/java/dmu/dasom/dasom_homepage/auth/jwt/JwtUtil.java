@@ -89,4 +89,22 @@ public class JwtUtil {
         return newAccessToken;
     }
 
+    // 토큰 만료 메소드
+    public void expireToken(String accessToken) {
+        // 토큰에서 사용자 아이디를 가져옴
+        String username = getUsername(accessToken);
+
+        // Redis에서 토큰 삭제
+        stringRedisTemplate.delete("ACCESS_TOKEN_" + username);
+        stringRedisTemplate.delete("REFRESH_TOKEN_" + username);
+
+        // 토큰을 블랙리스트에 추가
+        addToBlacklist(accessToken);
+    }
+
+    // 블랙리스트 추가 메소드
+    private void addToBlacklist(String accessToken) {
+        stringRedisTemplate.opsForValue().set("BLACKLIST_" + accessToken, "true", 30, TimeUnit.MINUTES);
+    }
+
 }
