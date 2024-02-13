@@ -86,11 +86,11 @@ public class JwtUtil {
         String username = getUsername(refreshToken);
         String role = getRole(refreshToken);
 
-        String newAccessToken = createJwt(username, role, 60 * 1 * 1000L);
-        String newRefreshToken = createJwt(username, role, 60 * 2 * 1000L);
+        String newAccessToken = createJwt(username, role, 60 * 30 * 1000L);
+        String newRefreshToken = createJwt(username, role, 60 * 60 * 6 * 1000L);
 
-        stringRedisTemplate.opsForValue().set("ACCESS_TOKEN_" + username, newAccessToken, 1, TimeUnit.MINUTES);
-        stringRedisTemplate.opsForValue().set("REFRESH_TOKEN_" + username, newRefreshToken, 2, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set("ACCESS_TOKEN_" + username, newAccessToken, 30, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set("REFRESH_TOKEN_" + username, newRefreshToken, 6, TimeUnit.HOURS);
 
         Map<String, String> newTokens = new HashMap<>();
         newTokens.put("access", newAccessToken);
@@ -113,7 +113,7 @@ public class JwtUtil {
 
     // 블랙리스트 추가 메소드
     public void addToBlacklist(String accessToken) {
-        stringRedisTemplate.opsForValue().set("BLACKLIST_" + accessToken, "true", 1, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set("BLACKLIST_" + accessToken, "true", 30, TimeUnit.MINUTES);
     }
 
 }

@@ -78,18 +78,18 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         String role = auth.getAuthority();
 
         // 엑세스 토큰 유효시간 : 30m
-        String accessToken = jwtUtil.createJwt(username, role, 60 * 1 * 1000L);
+        String accessToken = jwtUtil.createJwt(username, role, 60 * 30 * 1000L);
         // 리프레시 토큰 유효시간 : 6h
-        String refreshToken = jwtUtil.createJwt(username, role, 60 * 2 * 1000L);
+        String refreshToken = jwtUtil.createJwt(username, role, 60 * 60 * 6 * 1000L);
 
         // 토큰 반환
         response.addHeader("Authorization", "Bearer " + accessToken);
         response.addHeader("AuthorizationRefresh", "Bearer " + refreshToken);
         response.addHeader("MemberRole", role);
-
+        
         // Redis에 저장
-        redisTemplate.opsForValue().set("ACCESS_TOKEN_" + customUserDetails.getUsername(), accessToken, 1, TimeUnit.MINUTES);
-        redisTemplate.opsForValue().set("REFRESH_TOKEN_" + customUserDetails.getUsername(), refreshToken, 2, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set("ACCESS_TOKEN_" + customUserDetails.getUsername(), accessToken, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set("REFRESH_TOKEN_" + customUserDetails.getUsername(), refreshToken, 6, TimeUnit.HOURS);
     }
 
     // 로그인 실패 핸들러
