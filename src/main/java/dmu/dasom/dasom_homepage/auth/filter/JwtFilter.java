@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class JwtFilter extends OncePerRequestFilter {
 
@@ -55,9 +56,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            // 새로운 액세스 토큰을 발급하고 204 코드와 함께 클라이언트로 반환
-            accessToken = jwtUtil.createNewAccessToken(refreshToken);
-            response.setHeader("Authorization", "Bearer " + accessToken);
+            // 새로운 액세스 토큰과 리프레시 토큰을 발급하고 204 코드와 함께 클라이언트로 반환
+            Map<String, String> newTokens = jwtUtil.createNewTokens(refreshToken);
+            response.setHeader("Authorization", "Bearer " + newTokens.get("access"));
+            response.setHeader("AuthorizationRefresh", "Bearer " + newTokens.get("refresh"));
             response.setStatus(HttpServletResponse.SC_NO_CONTENT);
             return;
         }

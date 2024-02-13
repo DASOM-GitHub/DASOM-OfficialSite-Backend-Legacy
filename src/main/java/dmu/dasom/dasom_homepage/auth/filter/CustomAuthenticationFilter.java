@@ -46,10 +46,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String username = loginDTO.getUsername();
             String password = loginDTO.getPassword();
 
-            // 동시 로그인을 방지하기 위해 사용자의 기존 토큰을 만료 시킴
-            if (Boolean.TRUE.equals(redisTemplate.hasKey("ACCESS_TOKEN_" + username)))
-                jwtUtil.expireToken(redisTemplate.opsForValue().get("ACCESS_TOKEN_" + username));
-
             // 검증을 위해 token으로 만듦
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
 
@@ -71,24 +67,29 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         String username = customUserDetails.getUsername();
 
+        // 동시 로그인을 방지하기 위해 사용자의 기존 토큰을 만료 시킴
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("ACCESS_TOKEN_" + username)))
+            jwtUtil.expireToken(redisTemplate.opsForValue().get("ACCESS_TOKEN_" + username));
+
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
 
         String role = auth.getAuthority();
 
-        // 엑세스 토큰 유효시간 : 20m
-        String accessToken = jwtUtil.createJwt(username, role, 60 * 20 * 1000L);
+        // 엑세스 토큰 유효시간 : 30m
+        String accessToken = jwtUtil.createJwt(username, role, 60 * 1 * 1000L);
         // 리프레시 토큰 유효시간 : 6h
-        String refreshToken = jwtUtil.createJwt(username, role, 60 * 60 * 6 * 1000L);
+        String refreshToken = jwtUtil.createJwt(username, role, 60 * 2 * 1000L);
 
         // 토큰 반환
         response.addHeader("Authorization", "Bearer " + accessToken);
         response.addHeader("AuthorizationRefresh", "Bearer " + refreshToken);
+        response.addHeader("MemberRole", role);
 
         // Redis에 저장
-        redisTemplate.opsForValue().set("ACCESS_TOKEN_" + customUserDetails.getUsername(), accessToken, 20, TimeUnit.MINUTES);
-        redisTemplate.opsForValue().set("REFRESH_TOKEN_" + customUserDetails.getUsername(), refreshToken, 6, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set("ACCESS_TOKEN_" + customUserDetails.getUsername(), accessToken, 1, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set("REFRESH_TOKEN_" + customUserDetails.getUsername(), refreshToken, 2, TimeUnit.MINUTES);
     }
 
     // 로그인 실패 핸들러

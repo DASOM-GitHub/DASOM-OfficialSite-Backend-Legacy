@@ -10,6 +10,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -73,20 +75,27 @@ public class JwtUtil {
 
     // 클라이언트로부터 온 리프레시 토큰과 Redis 속 리프레시 토큰을 비교
     public boolean verifyRefreshToken(String refreshToken) {
-        if (isExpired(refreshToken))
-            return false;
-
         String refreshTokenRedis = Optional.ofNullable(stringRedisTemplate)
                 .map(template -> template.opsForValue().get("REFRESH_TOKEN_" + getUsername(refreshToken)))
                 .orElse(null);
-        return refreshTokenRedis != null && refreshTokenRedis.equals(refreshToken);
+        return !isExpired(refreshToken) && refreshTokenRedis != null && refreshTokenRedis.equals(refreshToken);
     }
 
-    // 모든 검증이 끝나고 새로운 액세스 토큰을 발급하여 반환
-    public String createNewAccessToken(String refreshToken) {
-        String newAccessToken = createJwt(getUsername(refreshToken), getRole(refreshToken), 60 * 20 * 1000L);
-        stringRedisTemplate.opsForValue().set("ACCESS_TOKEN_" + getUsername(refreshToken), newAccessToken, 20, TimeUnit.MINUTES);
-        return newAccessToken;
+    // 모든 검증이 끝나고 새로운 액세스 토큰과 리프레시 토큰을 발급하여 반환
+    public Map<String, String> createNewTokens(String refreshToken) {
+        String username = getUsername(refreshToken);
+        String role = getRole(refreshToken);
+
+        String newAccessToken = createJwt(username, role, 60 * 1 * 1000L);
+        String newRefreshToken = createJwt(username, role, 60 * 2 * 1000L);
+
+        stringRedisTemplate.opsForValue().set("ACCESS_TOKEN_" + username, newAccessToken, 1, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set("REFRESH_TOKEN_" + username, newRefreshToken, 2, TimeUnit.MINUTES);
+
+        Map<String, String> newTokens = new HashMap<>();
+        newTokens.put("access", newAccessToken);
+        newTokens.put("refresh", newRefreshToken);
+        return newTokens;
     }
 
     // 토큰 만료 메소드
@@ -103,8 +112,8 @@ public class JwtUtil {
     }
 
     // 블랙리스트 추가 메소드
-    private void addToBlacklist(String accessToken) {
-        stringRedisTemplate.opsForValue().set("BLACKLIST_" + accessToken, "true", 30, TimeUnit.MINUTES);
+    public void addToBlacklist(String accessToken) {
+        stringRedisTemplate.opsForValue().set("BLACKLIST_" + accessToken, "true", 1, TimeUnit.MINUTES);
     }
 
 }
