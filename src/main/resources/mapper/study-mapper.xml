@@ -55,7 +55,7 @@
 
     <insert id="addParticipant" parameterType="StudyParticipants">
         insert into study_participants
-        values (#{studyNo}, #{participantNo}, #{participantRole})
+        values (#{studyNo}, #{participantNo})
     </insert>
 
     <select id="isParticipant" resultType="boolean">
@@ -75,4 +75,28 @@
         select * from study_project_role
         where role_name = #{roleName}
     </select>
+    
+    
+    <select id="getStudyProgresses" parameterType="int" resultType="StudyProgress">
+        SELECT * FROM study_progress WHERE study_no = #{studyNo}
+    </select>
+    
+    <insert id="addStudyProgress" parameterType="StudyProgress">
+        INSERT INTO study_progress VALUES (#{studyNo}, #{studyWeek}, #{weekContent})
+    </insert>
+
+    <update id="editStudyProgress" parameterType="StudyProgressUpdate">
+        UPDATE study_progress
+        SET study_week = #{studyWeek}, week_content = #{weekContent}
+        WHERE study_no = #{originStudyNo} AND study_week = #{originStudyWeek}
+    </update>
+    
+    <delete id="deleteStudyProgress" parameterType="int">
+        DELETE FROM study_progress WHERE study_no = #{studyNo} AND study_week = #{studyWeek}
+    </delete>
+    
+    <select id="isStudyProgressExists" parameterType="int" resultType="boolean">
+        SELECT EXISTS(SELECT * FROM study_progress WHERE study_no = #{studyNo} AND study_week = #{studyWeek})
+    </select>
+    
 </mapper>

@@ -41,4 +41,16 @@ public interface StudyRepository {
     //---------category | role ----------
     Category getCategoryByName(String categoryName);
     Role getRoleByName(String role_name);
+
+
+    List<StudyProgress> getStudyProgresses(int studyNo);
+
+    void addStudyProgress(StudyProgress studyProgress);
+
+    void editStudyProgress(StudyProgressUpdate studyProgressUpdate);
+
+    void deleteStudyProgress(int studyNo, int studyWeek);
+
+    boolean isStudyProgressExists(int studyNo, int studyWeek);
+
 }

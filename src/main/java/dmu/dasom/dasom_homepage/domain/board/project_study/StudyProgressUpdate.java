@@ -7,8 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudyProgress {
-    private int studyNo;
+public class StudyProgressUpdate {
+    private int originStudyNo;
+    private int originStudyWeek;
+
     private int studyWeek;
     private String weekContent;
 }
