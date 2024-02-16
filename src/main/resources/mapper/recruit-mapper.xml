@@ -3,8 +3,7 @@
 <mapper namespace="dmu.dasom.dasom_homepage.repository.RecruitRepository">
     <!-- 모집 일정 관련 쿼리 -->
     <insert id="createNewRecruitSchedule" parameterType="RecruitSchedule">
-        INSERT INTO recruit_schedule(rec_no, rec_name, rec_description)
-        VALUES (#{recNo}, #{recName}, #{recDescription});
+        INSERT INTO recruit_schedule VALUES (#{recNo});
 
         INSERT INTO recruit_period
         VALUES (#{recNo}, #{applyStart}, #{applyEnd}, #{firstAnnounce}, #{interviewStart}, #{interviewEnd}, #{secondAnnounce});
@@ -19,12 +18,6 @@
     </select>
 
     <update id="updateRecruitSchedule" parameterType="RecruitSchedule">
-        UPDATE recruit_schedule
-        SET rec_name        = #{recName},
-            rec_description = #{recDescription},
-            is_rec_active   = #{isRecActive}
-        WHERE rec_no = #{recNo};
-
         UPDATE recruit_period
         SET apply_start     = #{applyStart},
             apply_end       = #{applyEnd},

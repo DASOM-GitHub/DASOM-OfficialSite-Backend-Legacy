@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/recruit")
-@PreAuthorize("hasRole('MANAGER')")
+//@PreAuthorize("hasRole('MANAGER')")
 public class RecruitScheduleController {
     private final RecruitScheduleService recruitScheduleService;
 
@@ -24,14 +24,14 @@ public class RecruitScheduleController {
 
     /* GET */
     // 모집 스케줄 리스트 가져오기
-    @PreAuthorize("permitAll()")
+//    @PreAuthorize("permitAll()")
     @GetMapping()
     public ResponseEntity<ApiResponse<List<RecruitScheduleIndex>>> getRecruitScheduleList() {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, recruitScheduleService.getRecruitScheduleList()));
     }
 
     // 모집 스케줄 상세 정보 가져오기
-    @PreAuthorize("permitAll()")
+//    @PreAuthorize("permitAll()")
     @GetMapping("/{recNo}")
     public ResponseEntity<ApiResponse<RecruitSchedule>> getRecruitScheduleDetails(@PathVariable int recNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, recruitScheduleService.getRecruitScheduleDetails(recNo)));
