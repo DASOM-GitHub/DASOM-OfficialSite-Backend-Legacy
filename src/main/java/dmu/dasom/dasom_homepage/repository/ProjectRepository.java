@@ -1,12 +1,11 @@
 package dmu.dasom.dasom_homepage.repository;
 
-import dmu.dasom.dasom_homepage.domain.admin.*;
+import dmu.dasom.dasom_homepage.domain.board.project_study.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 @Repository
@@ -15,7 +14,10 @@ public interface ProjectRepository {
     List<ProjectList> getProjects();
 
     // 수정 : 존재 유무 확인 select | 해당 project 상세페이지
-    Project findProjectById(int project_no);
+    Project findProjectById(int projectNo);
+
+    // 프로젝트 존재 여부 확인
+    Boolean isProjectExistById(int projectNo);
 
     // 생성
     void createProject(Project project);
@@ -34,7 +36,7 @@ public interface ProjectRepository {
     void removeParticipant(@Param("projectNo")int projectNo, @Param("participantNo")int participantNo);
     void addParticipant(ProjectParticipants projectParcitipants);
     //해당 부원의 존재를 확인하기 위한 부원 반환
-    ProjectParticipants getParticipant(@Param("projectNo")int projectNo, @Param("participantNo")int participantNo);
+    Boolean isParticipant(@Param("projectNo")int projectNo, @Param("participantNo")int participantNo);
 
     //---------category | role ----------
     Category getCategoryByName(String categoryName);

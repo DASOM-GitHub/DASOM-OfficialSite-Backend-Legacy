@@ -1,4 +1,4 @@
-package dmu.dasom.dasom_homepage.domain.admin;
+package dmu.dasom.dasom_homepage.domain.board.project_study;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ public class Project {
     private int organizerNo;
     private String ProjectTitle;
     private String projectContent;
-    private String projectCategory;
+    private String thumbnailPic;
     private String projectPic;
     private String startDate;
     private String endDate;

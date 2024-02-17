@@ -6,6 +6,10 @@
         SELECT EXISTS (SELECT * FROM dasom_new_member WHERE unique_code = #{uniqueCode}) AS result
     </select>
 
+    <select id="isUniqueCodeExpired" parameterType="String" resultType="boolean">
+        SELECT is_code_expired FROM dasom_new_member WHERE unique_code = #{uniqueCode}
+    </select>
+
     <select id="existByEmail" parameterType="String" resultType="boolean">
         SELECT EXISTS (SELECT * FROM member_table WHERE mem_email = #{memEmail}) AS result
     </select>
@@ -14,5 +18,9 @@
         INSERT INTO member_table (mem_email, mem_password, mem_name, mem_grade, mem_department, mem_rec_no)
         VALUES (#{memEmail}, #{memPassword}, #{memName}, #{memGrade}, #{memDepartment}, #{memRecNo})
     </insert>
+
+    <update id="expireUniqueCode" parameterType="String">
+        UPDATE dasom_new_member SET is_code_expired = '1' WHERE unique_code = #{uniqueCode}
+    </update>
 
 </mapper>

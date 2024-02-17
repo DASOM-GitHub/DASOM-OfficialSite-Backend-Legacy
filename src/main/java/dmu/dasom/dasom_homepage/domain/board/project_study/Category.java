@@ -1,4 +1,4 @@
-package dmu.dasom.dasom_homepage.domain.admin;
+package dmu.dasom.dasom_homepage.domain.board.project_study;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,9 @@
-package dmu.dasom.dasom_homepage.domain.admin;
+package dmu.dasom.dasom_homepage.domain.board.project_study;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -13,7 +14,9 @@ public class Study {
     private int organizerNo;
     private String studyTitle;
     private String studyContent;
-    private String studyCategory;
+    private String referencesUrl;
+    private String notionUrl;
+    private String thumbnailPic;
     private String studyPic;
     private String startDate;
     private String endDate;

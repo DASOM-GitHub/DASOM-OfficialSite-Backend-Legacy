@@ -1,8 +1,10 @@
-package dmu.dasom.dasom_homepage.controller.admin;
+package dmu.dasom.dasom_homepage.controller.board;
 
-import dmu.dasom.dasom_homepage.domain.admin.*;
+import dmu.dasom.dasom_homepage.domain.board.project_study.Project;
+import dmu.dasom.dasom_homepage.domain.board.project_study.ProjectList;
+import dmu.dasom.dasom_homepage.domain.board.project_study.ProjectParticipants;
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
-import dmu.dasom.dasom_homepage.service.admin.ProjectService;
+import dmu.dasom.dasom_homepage.service.board.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class ProjectController {
 
     //수정하기
     @PutMapping()
-    public ResponseEntity<ApiResponse> edit(@ModelAttribute Project project, @RequestParam(value = "projectFile") MultipartFile projectFile) throws IOException {
+    public ResponseEntity<ApiResponse<Void>> edit(@ModelAttribute Project project, @RequestPart(value = "projectFile") MultipartFile projectFile) throws IOException {
         projectService.editProject(project, projectFile);
         // 추후 ioException 수정 필요 -> handler추가 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
@@ -32,7 +34,7 @@ public class ProjectController {
 
     @GetMapping()
     // 모든 유저가 /study에 접근시 study 내용 반환
-    public ResponseEntity<ApiResponse<List<ProjectList>>> getStudys(){
+    public ResponseEntity<ApiResponse<List<ProjectList>>> getStudies(){
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, projectService.getProjects()));
     }
 
@@ -46,7 +48,7 @@ public class ProjectController {
 
     @PostMapping()
     // project 추가 생성
-    public ResponseEntity<ApiResponse> create(@ModelAttribute Project project, @RequestParam(value = "projectFile") MultipartFile projectFile) throws IOException {
+    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Project project, @RequestParam(value = "projectFile") MultipartFile projectFile) throws IOException {
         projectService.createProject(project, projectFile);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -56,7 +58,7 @@ public class ProjectController {
 
     @DeleteMapping("/{projectNo}")
     //admin 유저가 삭제
-    public ResponseEntity<ApiResponse> remove(@PathVariable("projectNo") int projectNo) {
+    public ResponseEntity<ApiResponse<Void>> remove(@PathVariable("projectNo") int projectNo) {
         projectService.removeProject(projectNo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
@@ -71,7 +73,7 @@ public class ProjectController {
 
     //특정 project에서 부원 추가하기
     @PostMapping("/{projectNo}/participants")
-    public ResponseEntity<ApiResponse> addParticipants(@PathVariable("projectNo") int projectNo,@ModelAttribute ProjectParticipants projectParticipants) {//@ModelAttribute Role role
+    public ResponseEntity<ApiResponse<Void>> addParticipants(@PathVariable("projectNo") int projectNo,@ModelAttribute ProjectParticipants projectParticipants) {//@ModelAttribute Role role
         projectParticipants.setProjectNo(projectNo);
         projectService.addParticipant(projectParticipants);
 
@@ -80,7 +82,7 @@ public class ProjectController {
 
     //부원 삭제하기
     @DeleteMapping("/{projectNo}/participants/{participantNo}")
-    public ResponseEntity<ApiResponse> removeParticipants(@PathVariable("projectNo") int projectNo,@PathVariable("participantNo") int participantNo) {
+    public ResponseEntity<ApiResponse<Void>> removeParticipants(@PathVariable("projectNo") int projectNo,@PathVariable("participantNo") int participantNo) {
         projectService.removeParticipant(projectNo, participantNo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }

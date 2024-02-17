@@ -8,6 +8,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RecruitScheduleIndex {
     private int recNo;
-    private String recName;
-    private String isRecActive;
+//    private String recName;
+//    private String isRecActive;
 }

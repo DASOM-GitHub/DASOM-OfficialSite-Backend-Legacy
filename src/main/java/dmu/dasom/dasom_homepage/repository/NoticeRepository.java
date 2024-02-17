@@ -1,8 +1,8 @@
 package dmu.dasom.dasom_homepage.repository;
 
-import dmu.dasom.dasom_homepage.domain.notice.NoticeDetailList;
-import dmu.dasom.dasom_homepage.domain.notice.NoticeList;
-import dmu.dasom.dasom_homepage.domain.notice.NoticeTable;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeDetailList;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeList;
+import dmu.dasom.dasom_homepage.domain.board.notice.NoticeTable;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

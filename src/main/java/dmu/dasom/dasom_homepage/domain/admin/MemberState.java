@@ -7,7 +7,13 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class MemberState {
-    private String memeberState;
+    private int memNo;
+
+    private String memName;
+
+    private int memGrade;
+
+    private String memState;
 
     private String leaveDate;
 
@@ -15,9 +21,4 @@ public class MemberState {
 
     private String memDepartment;
 
-    private String memName;
-
-    private String memContact;
-
-    private int memNo;
 }
