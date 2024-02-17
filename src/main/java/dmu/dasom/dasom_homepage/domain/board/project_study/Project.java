@@ -13,7 +13,7 @@ public class Project {
     private int organizerNo;
     private String ProjectTitle;
     private String projectContent;
-    private String thumbnailPic;
+    private String projectCategory;
     private String projectPic;
     private String startDate;
     private String endDate;

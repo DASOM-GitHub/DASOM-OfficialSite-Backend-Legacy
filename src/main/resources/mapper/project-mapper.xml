@@ -3,23 +3,18 @@
 <mapper namespace="dmu.dasom.dasom_homepage.repository.ProjectRepository">
 
     <select id="getProjects" resultType="ProjectList">
-        SELECT project_no, project_title, project_content, thumbnail_pic FROM project_table
+        SELECT project_no, project_title, project_content, project_pic FROM project_table
     </select>
 
     <insert id="createProject" parameterType="Project">
-        INSERT INTO project_table(writer_no, organizer_no, project_title, project_content, thumbnail_pic, project_pic, start_date, end_date)
-        VALUES(#{writerNo}, #{organizerNo}, #{projectTitle}, #{projectContent}, #{thumbnailPic}, #{projectPic}, #{startDate}, #{endDate})
+        INSERT INTO project_table(writer_no, organizer_no, project_title, project_content, project_category, project_pic, start_date, end_date)
+        VALUES(#{writerNo}, #{organizerNo}, #{projectTitle}, #{projectContent}, #{projectCategory}, #{projectPic}, #{startDate}, #{endDate})
     </insert>
 
     <update id="editProject" parameterType="Project">
         UPDATE project_table
-        SET organizer_no = #{organizerNo},
-            project_title = #{projectTitle},
-            project_content = #{projectContent},
-            thumbnail_pic = #{thumbnailPic},
-            project_pic = #{projectPic},
-            start_date = #{startDate},
-            end_date = #{endDate}
+        <!-- update organizer_no, title, content, category, pic, start,end date -->
+        SET organizer_no = #{organizerNo}, project_title = #{projectTitle}, project_content = #{projectContent}, project_category = #{projectCategory}, project_pic = #{projectPic}, start_date = #{startDate}, end_date = #{endDate}
         WHERE project_no = #{projectNo}
     </update>
 
@@ -64,10 +59,10 @@
     </select>
 
     <!-- category | role 부분-->
-<!--    <select id="getCategoryByName" parameterType="String" resultType="Category">-->
-<!--        select * from study_project_category-->
-<!--        where category_name = #{categoryName}-->
-<!--    </select>-->
+    <select id="getCategoryByName" parameterType="String" resultType="Category">
+        select * from study_project_category
+        where category_name = #{categoryName}
+    </select>
 
     <select id="getRoleByName" parameterType="String" resultType="Role">
         select * from study_project_role

@@ -30,6 +30,5 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.board.project_study.StudyParticipants" alias="StudyParticipants"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.board.project_study.Role" alias="Role"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.board.project_study.Category" alias="Category"/>
-        <typeAlias type="dmu.dasom.dasom_homepage.domain.board.project_study.StudyProgress" alias="StudyProgress"/>
     </typeAliases>
 </configuration>
