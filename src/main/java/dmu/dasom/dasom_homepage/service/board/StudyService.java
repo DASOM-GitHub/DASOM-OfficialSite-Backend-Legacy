@@ -1,6 +1,8 @@
 package dmu.dasom.dasom_homepage.service.board;
 
-import dmu.dasom.dasom_homepage.domain.board.project_study.*;
+import dmu.dasom.dasom_homepage.domain.board.project_study.Study;
+import dmu.dasom.dasom_homepage.domain.board.project_study.StudyList;
+import dmu.dasom.dasom_homepage.domain.board.project_study.StudyParticipants;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
 import dmu.dasom.dasom_homepage.exception.InsertConflictException;
 import dmu.dasom.dasom_homepage.exception.ProjectException;
@@ -135,38 +137,4 @@ public class StudyService {
 //        Optional<Role> role = Optional.ofNullable(studyRepository.getRoleByName(role_name));
 //        return role.isPresent();
 //    }
-
-
-    public List<StudyProgress> getStudyProgresses(int studyNo) {
-        List<StudyProgress> studyProgresses = studyRepository.getStudyProgresses(studyNo);
-        if (studyProgresses.isEmpty())
-            throw new DataNotFoundException();
-        return studyProgresses;
-    }
-
-    public void addStudyProgress(int studyNo, StudyProgress studyProgress) {
-        if (isStudyProgressExists(studyNo, studyProgress.getStudyWeek()))
-            throw new InsertConflictException();
-        studyProgress.setStudyNo(studyNo);
-        studyRepository.addStudyProgress(studyProgress);
-    }
-
-    public void editStudyProgress(int studyNo, int studyWeek, StudyProgressUpdate studyProgressUpdate) {
-        if (!isStudyProgressExists(studyNo, studyWeek))
-            throw new DataNotFoundException();
-        studyProgressUpdate.setOriginStudyNo(studyNo);
-        studyProgressUpdate.setOriginStudyWeek(studyWeek);
-        studyRepository.editStudyProgress(studyProgressUpdate);
-    }
-
-    public void deleteStudyProgress(int studyNo, int weekNo) {
-        if (!isStudyProgressExists(studyNo, weekNo))
-            throw new DataNotFoundException();
-        studyRepository.deleteStudyProgress(studyNo, weekNo);
-    }
-
-    private boolean isStudyProgressExists(int studyNo, int weekNo) {
-        return studyRepository.isStudyProgressExists(studyNo, weekNo);
-    }
-
 }

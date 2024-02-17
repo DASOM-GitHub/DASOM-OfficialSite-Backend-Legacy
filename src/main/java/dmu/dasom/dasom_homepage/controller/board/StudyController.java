@@ -1,6 +1,8 @@
 package dmu.dasom.dasom_homepage.controller.board;
 
-import dmu.dasom.dasom_homepage.domain.board.project_study.*;
+import dmu.dasom.dasom_homepage.domain.board.project_study.Study;
+import dmu.dasom.dasom_homepage.domain.board.project_study.StudyList;
+import dmu.dasom.dasom_homepage.domain.board.project_study.StudyParticipants;
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import dmu.dasom.dasom_homepage.service.board.StudyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,33 +86,4 @@ public class StudyController {
         studyService.removeParticipant(studyNo, participantNo);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
-
-
-    // 스터디 진행 사항 조회
-    @GetMapping("/{studyNo}/progress")
-    public ResponseEntity<ApiResponse<List<StudyProgress>>> getStudyProgresses(@PathVariable int studyNo) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, studyService.getStudyProgresses(studyNo)));
-    }
-
-    // 스터디 진행 사항 추가
-    @PostMapping("/{studyNo}/progress")
-    public ResponseEntity<ApiResponse<Void>> addStudyProgress(@PathVariable int studyNo, @RequestBody StudyProgress studyProgress) {
-        studyService.addStudyProgress(studyNo, studyProgress);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
-    }
-
-    // 스터디 진행 사항 수정
-    @PutMapping("/{studyNo}/progress/{studyWeek}")
-    public ResponseEntity<ApiResponse<Void>> editStudyProgress(@PathVariable int studyNo, @PathVariable int studyWeek, @RequestBody StudyProgressUpdate studyProgressUpdate) {
-        studyService.editStudyProgress(studyNo, studyWeek, studyProgressUpdate);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
-    }
-
-    // 스터디 진행 사항 삭제
-    @DeleteMapping("/{studyNo}/progress/{studyWeek}")
-    public ResponseEntity<ApiResponse<Void>> deleteStudyProgress(@PathVariable int studyNo, @PathVariable int studyWeek) {
-        studyService.deleteStudyProgress(studyNo, studyWeek);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
-    }
-
 }
