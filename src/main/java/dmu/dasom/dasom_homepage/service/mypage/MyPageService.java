@@ -43,6 +43,10 @@ public class MyPageService {
     }
 
     public void updateMemProfilePic(MultipartFile profilePic, String authorization) throws IOException {
+        // 요청 된 사진 파일이 없을 경우, 기존 프로필 사진을 삭제 함
+        if (profilePic == null)
+            s3UploadService.deleteFile(getMemInfo(authorization).getMemProfilePic());
+
         // 토큰을 기반으로 프로필 사진을 업데이트 하고자 하는 사용자를 판단
         // 클라우드 스토리지에 사진을 저장하고 그 사진의 주소를 받아 DB에 저장함
         memberRepository.updateMyProfilePic(s3UploadService.saveFile(profilePic), jwtUtil.getUsername(jwtUtil.parseToken(authorization)));
