@@ -34,5 +34,9 @@
     <select id="getMyPw" parameterType="String" resultType="String">
         SELECT mem_password FROM member_table WHERE mem_email = #{memEmail}
     </select>
+
+    <select id="getMemberIndexList" resultType="DasomMemberIndex">
+        SELECT * FROM member_list_index;
+    </select>
     
 </mapper>
