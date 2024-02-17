@@ -5,11 +5,7 @@ import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.ResponseStatus;
-=======
 import org.springframework.web.bind.annotation.RestControllerAdvice;
->>>>>>> develop
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @RestControllerAdvice
@@ -24,10 +20,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false));
     }
 
-<<<<<<< HEAD
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
-=======
     @ExceptionHandler(UnAuthorizedAccessException.class)
     public ResponseEntity<ApiResponse<Void>> handleUnAuthorizedAccessException(UnAuthorizedAccessException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(false));
@@ -42,10 +34,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleLogoutErrorException(LogoutErrorException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse<>(false));
     }
-  
+
     @ExceptionHandler(MaxUploadSizeExceededException.class)
 //    @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
->>>>>>> develop
     public ResponseEntity<ApiResponse<Void>> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(new ApiResponse<>(false));
