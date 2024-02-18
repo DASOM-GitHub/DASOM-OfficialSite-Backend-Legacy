@@ -93,8 +93,8 @@ public class JwtUtil {
         stringRedisTemplate.opsForValue().set("REFRESH_TOKEN_" + username, newRefreshToken, 6, TimeUnit.HOURS);
 
         Map<String, String> newTokens = new HashMap<>();
-        newTokens.put("access", newAccessToken);
-        newTokens.put("refresh", newRefreshToken);
+        newTokens.put("accessToken", "Bearer " + newAccessToken);
+        newTokens.put("refreshToken", "Bearer " + newRefreshToken);
         return newTokens;
     }
 

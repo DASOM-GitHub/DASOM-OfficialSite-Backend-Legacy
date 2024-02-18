@@ -1,12 +1,16 @@
 package dmu.dasom.dasom_homepage.auth.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.dasom.dasom_homepage.auth.jwt.JwtUtil;
 import dmu.dasom.dasom_homepage.auth.userdetails.CustomUserDetails;
 import dmu.dasom.dasom_homepage.domain.member.DasomMember;
+import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,11 +60,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            // 새로운 액세스 토큰과 리프레시 토큰을 발급하고 204 코드와 함께 클라이언트로 반환
+            // 새로운 액세스 토큰과 리프레시 토큰을 발급하고 202 코드와 함께 클라이언트로 반환
             Map<String, String> newTokens = jwtUtil.createNewTokens(refreshToken);
-            response.setHeader("Authorization", "Bearer " + newTokens.get("access"));
-            response.setHeader("AuthorizationRefresh", "Bearer " + newTokens.get("refresh"));
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            ApiResponse<Map<String, String>> apiResponse = new ApiResponse<>(true, newTokens);
+            response.setStatus(HttpStatus.ACCEPTED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
             return;
         }
 

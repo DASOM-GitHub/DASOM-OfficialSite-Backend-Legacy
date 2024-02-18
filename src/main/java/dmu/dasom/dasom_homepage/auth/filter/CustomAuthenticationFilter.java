@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.dasom.dasom_homepage.auth.jwt.JwtUtil;
 import dmu.dasom.dasom_homepage.auth.userdetails.CustomUserDetails;
 import dmu.dasom.dasom_homepage.domain.login.LoginDTO;
+import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +22,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 // formLogin을 비활성 했기 때문에 직접 UsernamePasswordAuthenticationFilter를 커스텀 함
@@ -82,10 +87,16 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         // 리프레시 토큰 유효시간 : 6h
         String refreshToken = jwtUtil.createJwt(username, role, 60 * 60 * 6 * 1000L);
 
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("accessToken", "Bearer " + accessToken);
+        responseBody.put("refreshToken", "Bearer " + refreshToken);
+        responseBody.put("memberRole", role);
+
         // 토큰 반환
-        response.addHeader("Authorization", "Bearer " + accessToken);
-        response.addHeader("AuthorizationRefresh", "Bearer " + refreshToken);
-        response.addHeader("MemberRole", role);
+        ApiResponse<Map<String, String>> apiResponse = new ApiResponse<>(true, responseBody);
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(new ObjectMapper().writeValueAsString(apiResponse));
         
         // Redis에 저장
         redisTemplate.opsForValue().set("ACCESS_TOKEN_" + customUserDetails.getUsername(), accessToken, 30, TimeUnit.MINUTES);
