@@ -46,8 +46,8 @@ public class StudyController {
 
     @PostMapping()
     // study 추가 생성
-    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Study study, @RequestParam(value = "studyFile") MultipartFile studyFile) throws IOException {
-        studyService.createStudy(study, studyFile);
+    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Study study, @RequestParam(value = "studyFile") List<MultipartFile> studyFiles) throws IOException {
+        studyService.createStudy(study, studyFiles);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true));

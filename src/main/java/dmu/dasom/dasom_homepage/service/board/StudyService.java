@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,10 +45,13 @@ public class StudyService {
     }
 
     // admin 접근 : create new Study | edit study
-    public void createStudy(Study study, MultipartFile studyFile) throws IOException {
-        //파일 저장
-        String fileUrl = s3UploadService.saveFile(studyFile);
-        study.setStudyPic(fileUrl);
+    public void createStudy(Study study, List<MultipartFile> studyFiles) throws IOException {
+        List<String> fileUrls = new ArrayList<>();
+        for (MultipartFile projectFile : studyFiles) {
+            // 각 파일을 저장하고 파일 URL을 얻어옴
+            String fileUrl = s3UploadService.saveFile(projectFile);
+            fileUrls.add(fileUrl);
+        }
 
         studyRepository.createStudy(study);
     }

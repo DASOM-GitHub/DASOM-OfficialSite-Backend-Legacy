@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,10 +47,13 @@ public class ProjectService {
     }
 
     // admin 접근 : create new Project | edit project
-    public void createProject(Project project, MultipartFile projectFile) throws IOException {
-        //파일 저장
-        String fileUrl = s3UploadService.saveFile(projectFile);
-        project.setProjectPic(fileUrl);
+    public void createProject(Project project, List<MultipartFile> projectFiles) throws IOException {
+        List<String> fileUrls = new ArrayList<>();
+        for (MultipartFile projectFile : projectFiles) {
+            // 각 파일을 저장하고 파일 URL을 얻어옴
+            String fileUrl = s3UploadService.saveFile(projectFile);
+            fileUrls.add(fileUrl);
+        }
 
         projectRepository.createProject(project);
     }

@@ -48,8 +48,8 @@ public class ProjectController {
 
     @PostMapping()
     // project 추가 생성
-    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Project project, @RequestParam(value = "projectFile") MultipartFile projectFile) throws IOException {
-        projectService.createProject(project, projectFile);
+    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Project project, @RequestParam(value = "projectFile") List<MultipartFile> projectFiles) throws IOException {
+        projectService.createProject(project, projectFiles);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true));
