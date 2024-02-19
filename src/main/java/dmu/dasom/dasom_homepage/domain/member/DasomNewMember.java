@@ -11,6 +11,5 @@ import lombok.ToString;
 public class DasomNewMember {
     private String acStudentNo;
     private String uniqueCode;
-    private boolean isOriginMember;
     private boolean isCodeExpired;
 }
