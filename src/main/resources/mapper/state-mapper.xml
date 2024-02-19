@@ -7,17 +7,21 @@
     </delete>
 
     <update id="modifyMember" parameterType="MemberState">
-        UPDATE member_table set mem_department = #{memDepartment} , mem_name = #{memName} , mem_contact = #{memContact}
-        where memno = #{memNO}
+        UPDATE member_table
+        set mem_department = #{memDepartment},
+            mem_name       = #{memName},
+            mem_grade      = #{memGrade}
+        where mem_no = #{memNo};
     </update>
 
     <update id="stateChange" parameterType="MemberState">
-        UPDATE member_table set mem_state = #{memState} where memno = #{memNo}
+        UPDATE member_table set mem_state = #{memState}, state_update = CURRENT_TIMESTAMP where mem_no = #{memNo}
     </update>
 
     <select id="getMemberListAll" resultType="MemberState">
-        SELECT mem_no, mem_naem, mem_state FROM  member_table;
+        SELECT mem_no, mem_name, mem_state FROM  member_table;
     </select>
+
     <select id="getMemberList" resultType="MemberState">
         SELECT mem_no, mem_name, mem_state FROM member_table WHERE mem_no = #{memNo};
     </select>

@@ -6,4 +6,37 @@
         SELECT * FROM member_table WHERE mem_email = #{memEmail}
     </select>
 
+    <select id="getMyPageInfoByEmail" parameterType="String" resultType="MyPageDTO">
+        SELECT * FROM my_page_info_view WHERE mem_email = #{memEmail}
+    </select>
+
+    <update id="updateMyPageInfo" parameterType="MyPageDTO">
+        UPDATE member_table
+        SET mem_name        = #{memName},
+            mem_grade       = #{memGrade},
+            mem_department  = #{memDepartment},
+            mem_rec_no      = #{memRecNo}
+        WHERE mem_email = #{memEmail}
+    </update>
+
+    <update id="updateMyProfilePic" parameterType="String">
+        UPDATE member_table
+        SET mem_profile_pic = #{profilePicUrl}
+        WHERE mem_email = #{memEmail}
+    </update>
+
+    <update id="updateMyPw" parameterType="String">
+        UPDATE member_table
+        SET mem_password = #{newPw}
+        WHERE mem_email = #{memEmail}
+    </update>
+
+    <select id="getMyPw" parameterType="String" resultType="String">
+        SELECT mem_password FROM member_table WHERE mem_email = #{memEmail}
+    </select>
+
+    <select id="getMemberIndexList" resultType="DasomMemberIndex">
+        SELECT * FROM member_list_index;
+    </select>
+    
 </mapper>
