@@ -10,8 +10,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Study {
     private int studyNo;
-    private int writerNo;
-    private int organizerNo;
     private String studyTitle;
     private String studyContent;
     private String referencesUrl;

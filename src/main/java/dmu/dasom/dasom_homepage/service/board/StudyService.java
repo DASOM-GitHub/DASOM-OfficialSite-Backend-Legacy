@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,7 +36,7 @@ public class StudyService {
     // 한개의 상세 study 반환
     public Study getStudyById(int project_no){
         //존재 확인
-        if (!isProjectExistById(project_no))
+        if (!isStudyExistById(project_no))
             // 해당 study없음
             throw new DataNotFoundException();
 
@@ -45,47 +44,52 @@ public class StudyService {
     }
 
     // admin 접근 : create new Study | edit study
-    public void createStudy(Study study, List<MultipartFile> studyFiles) throws IOException {
-        List<String> fileUrls = new ArrayList<>();
-        for (MultipartFile projectFile : studyFiles) {
-            // 각 파일을 저장하고 파일 URL을 얻어옴
-            String fileUrl = s3UploadService.saveFile(projectFile);
-            fileUrls.add(fileUrl);
+    public void createStudy(Study study, MultipartFile thumbnailFile, MultipartFile studyFile) throws IOException {
+        if (thumbnailFile != null) {
+            String fileUrl = s3UploadService.saveFile(thumbnailFile);
+            study.setThumbnailPic(fileUrl);
         }
-
+        if (studyFile != null) {
+            String fileUrl = s3UploadService.saveFile(studyFile);
+            study.setStudyPic(fileUrl);
+        }
         studyRepository.createStudy(study);
     }
 
     //admin유저 접근 : 수정 : update
-    public void editStudy(Study study, MultipartFile studyFile) throws IOException{
-        if (!isProjectExistById(study.getStudyNo()))
+    public void editStudy(int studyNo, Study studyUpdate, MultipartFile thumbnailFile, MultipartFile studyFile) throws IOException{
+        studyUpdate.setStudyNo(studyNo);
+        if (!isStudyExistById(studyNo))
             //수정할 study를 찾을수 없음
             throw new DataNotFoundException();
-        //이전 파일 삭제
-        String oldFile = studyRepository.findStudyById(study.getStudyNo()).getStudyPic();
-        s3UploadService.deleteFile(oldFile);
-        // 수정
-        String fileUrl = s3UploadService.saveFile(studyFile);
-        study.setStudyPic(fileUrl);
 
-        studyRepository.editStudy(study);
+        Study originStudy = studyRepository.findStudyById(studyNo);
+        if (thumbnailFile != null) {
+            s3UploadService.deleteFile(originStudy.getThumbnailPic());
+            String fileUrl = s3UploadService.saveFile(thumbnailFile);
+            studyUpdate.setThumbnailPic(fileUrl);
+        }
+        if (studyFile != null) {
+            s3UploadService.deleteFile(originStudy.getStudyPic());
+            String fileUrl = s3UploadService.saveFile(studyFile);
+            studyUpdate.setStudyPic(fileUrl);
+        }
+        studyRepository.editStudy(studyUpdate);
     }
 
     //admin유저 접근 : 삭제 : delete study
     public void removeStudy(int studyNo){
-        if (!isProjectExistById(studyNo))
+        if (!isStudyExistById(studyNo))
             //삭제할 study를 찾을 수 없음
             throw new DataNotFoundException();
-
         //이전 파일 삭제
         String oldFile = studyRepository.findStudyById(studyNo).getStudyPic();
         s3UploadService.deleteFile(oldFile);
-
         studyRepository.removeStudy(studyNo);
     }
 
     //존재 유무 확인 select , 사용 함수 : 수정, 삭제
-    private boolean isProjectExistById(int project_no){
+    private boolean isStudyExistById(int project_no){
         return studyRepository.isStudyExistById(project_no);
     }
 
@@ -93,7 +97,7 @@ public class StudyService {
 
     public List<StudyParticipants> getParticipants(int project_no) {
         //해당 프로젝트가 있는지 여부 확인
-        if (!isProjectExistById(project_no)) {
+        if (!isStudyExistById(project_no)) {
             throw new DataNotFoundException();
         } else{
             return studyRepository.getParticipants(project_no);
@@ -101,7 +105,7 @@ public class StudyService {
     }
 
     public void addParticipant(StudyParticipants studyParticipants) {
-        if (!isProjectExistById(studyParticipants.getStudyNo()))
+        if (!isStudyExistById(studyParticipants.getStudyNo()))
             // study가 없을시
             throw new DataNotFoundException();
 
@@ -113,7 +117,7 @@ public class StudyService {
     }
 
     public void removeParticipant(int studyNo, int participantNo){
-        if (!isProjectExistById(studyNo))
+        if (!isStudyExistById(studyNo))
             // study가 없을시
             throw new DataNotFoundException();
 
@@ -128,17 +132,6 @@ public class StudyService {
         return studyRepository.isParticipant(studyNo, participantNo);
     }
 
-    //-------------------------category|role-------------------------
-
-//    private boolean isCategory(String categoryName){
-//        Optional<Category> ca = Optional.ofNullable(studyRepository.getCategoryByName(categoryName));
-//        return ca.isPresent();
-//    }
-//
-//    private boolean isRole(String role_name){
-//        Optional<Role> role = Optional.ofNullable(studyRepository.getRoleByName(role_name));
-//        return role.isPresent();
-//    }
 
 
     public List<StudyProgress> getStudyProgresses(int studyNo) {

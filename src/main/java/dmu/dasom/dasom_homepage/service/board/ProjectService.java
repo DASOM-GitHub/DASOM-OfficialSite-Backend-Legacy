@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,30 +46,37 @@ public class ProjectService {
     }
 
     // admin 접근 : create new Project | edit project
-    public void createProject(Project project, List<MultipartFile> projectFiles) throws IOException {
-        List<String> fileUrls = new ArrayList<>();
-        for (MultipartFile projectFile : projectFiles) {
-            // 각 파일을 저장하고 파일 URL을 얻어옴
-            String fileUrl = s3UploadService.saveFile(projectFile);
-            fileUrls.add(fileUrl);
+    public void createProject(Project project, MultipartFile thumbnailFile, MultipartFile projectFile) throws IOException {
+        if (thumbnailFile != null) {
+            String fileUrl = s3UploadService.saveFile(thumbnailFile);
+            project.setThumbnailPic(fileUrl);
         }
-
+        if (projectFile != null) {
+            String fileUrl = s3UploadService.saveFile(projectFile);
+            project.setProjectPic(fileUrl);
+        }
         projectRepository.createProject(project);
     }
 
     //admin유저 접근 : 수정 : update
-    public void editProject(Project project, MultipartFile projectFile) throws IOException{
-        if (!isProjectExistById(project.getProjectNo()))
+    public void editProject(int projectNo, Project projectUpdate, MultipartFile thumbnailFile, MultipartFile projectFile) throws IOException{
+        projectUpdate.setProjectNo(projectNo);
+        if (!isProjectExistById(projectNo))
             //수정할 project를 찾을수 없음
             throw new DataNotFoundException();
-        //이전 파일 삭제
-        String oldFile = projectRepository.findProjectById(project.getProjectNo()).getProjectPic();
-        s3UploadService.deleteFile(oldFile);
-        // 수정
-        String fileUrl = s3UploadService.saveFile(projectFile);
-        project.setProjectPic(fileUrl);
 
-        projectRepository.editProject(project);
+        Project originProject = projectRepository.findProjectById(projectNo);
+        if (thumbnailFile != null) {
+            s3UploadService.deleteFile(originProject.getThumbnailPic());
+            String fileUrl = s3UploadService.saveFile(thumbnailFile);
+            projectUpdate.setThumbnailPic(fileUrl);
+        }
+        if (projectFile != null) {
+            s3UploadService.deleteFile(originProject.getProjectPic());
+            String fileUrl = s3UploadService.saveFile(projectFile);
+            projectUpdate.setProjectPic(fileUrl);
+        }
+        projectRepository.editProject(projectUpdate);
     }
 
     //admin유저 접근 : 삭제 : delete project
@@ -128,15 +134,4 @@ public class ProjectService {
         return projectRepository.isParticipant(projectNo, participantNo);
     }
 
-    //-------------------------category|role-------------------------
-
-//    private boolean isCategory(String categoryName){
-//        Optional<Category> ca = Optional.ofNullable(projectRepository.getCategoryByName(categoryName));
-//        return ca.isPresent();
-//    }
-//
-//    private boolean isRole(String role_name){
-//        Optional<Role> role = Optional.ofNullable(projectRepository.getRoleByName(role_name));
-//        return role.isPresent();
-//    }
 }
