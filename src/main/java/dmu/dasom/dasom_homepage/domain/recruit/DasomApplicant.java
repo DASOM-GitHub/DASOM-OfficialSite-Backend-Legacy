@@ -18,4 +18,5 @@ public class DasomApplicant {
     private int acGrade;
     private String reasonForApply;
     private String applyDate;
+    private Boolean isAccepted;
 }

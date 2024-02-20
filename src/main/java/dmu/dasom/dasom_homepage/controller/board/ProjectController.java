@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/board/project")
 public class ProjectController {
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
     @Autowired
     public ProjectController(ProjectService projectService){
@@ -25,10 +25,13 @@ public class ProjectController {
     }
 
     //수정하기
-    @PutMapping()
-    public ResponseEntity<ApiResponse<Void>> edit(@ModelAttribute Project project, @RequestPart(value = "projectFile") MultipartFile projectFile) throws IOException {
-        projectService.editProject(project, projectFile);
-        // 추후 ioException 수정 필요 -> handler추가 필요
+    @PutMapping("/{projectNo}")
+    public ResponseEntity<ApiResponse<Void>> edit(@PathVariable("projectNo") int projectNo,
+                                                  @RequestPart Project project,
+                                                  @RequestPart(required = false) MultipartFile thumbnailFile,
+                                                  @RequestPart(required = false) MultipartFile projectFile) throws IOException {
+        projectService.editProject(projectNo, project, thumbnailFile, projectFile);
+        // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
@@ -48,11 +51,12 @@ public class ProjectController {
 
     @PostMapping()
     // project 추가 생성
-    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Project project, @RequestParam(value = "projectFile") List<MultipartFile> projectFiles) throws IOException {
-        projectService.createProject(project, projectFiles);
+    public ResponseEntity<ApiResponse<Void>> create(@RequestPart Project project,
+                                                    @RequestPart(required = false) MultipartFile thumbnailFile,
+                                                    @RequestPart(required = false) MultipartFile projectFile) throws IOException {
+        projectService.createProject(project, thumbnailFile, projectFile);
         // 추후 ioException 수정 필요
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
 

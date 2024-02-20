@@ -33,4 +33,6 @@ public interface RecruitRepository {
     void deleteApplicantByStudentNo(int recNo, int acStudentNo);
 
     Boolean isApplicantExistByRecNoAndStudentNo(int recNo, int acStudentNo);
+
+    void doAcceptProcess(int recNo);
 }

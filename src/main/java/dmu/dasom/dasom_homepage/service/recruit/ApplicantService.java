@@ -76,4 +76,11 @@ public class ApplicantService {
         }
     }
 
+    // 합격자 인증코드 생성 및 회원가입 직전 단계 이동 메소드
+    public void doAcceptProcess(int recNo) {
+        if (!recruitRepository.isRecruitScheduleExistByRecNo(recNo))
+            throw new DataNotFoundException();
+        recruitRepository.doAcceptProcess(recNo);
+    }
+
 }

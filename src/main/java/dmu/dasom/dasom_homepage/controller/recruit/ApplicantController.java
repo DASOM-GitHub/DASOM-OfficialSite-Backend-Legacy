@@ -45,6 +45,13 @@ public class ApplicantController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
+    // 합격자 인증코드 생성 및 회원가입 직전 단계로 이동 작업
+    @PostMapping("/{recNo}/applicants/accept-proc")
+    public ResponseEntity<ApiResponse<Void>> doAcceptProcess(@PathVariable int recNo) {
+        applicantService.doAcceptProcess(recNo);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
+    }
+
 
     /* PUT */
     // 지원자 정보 업데이트

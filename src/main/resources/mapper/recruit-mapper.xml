@@ -65,4 +65,14 @@
         SELECT EXISTS(SELECT * FROM dasom_applicant WHERE rec_no = #{recNo} AND ac_student_no = #{acStudentNo})
     </select>
 
+    <insert id="doAcceptProcess" parameterType="int">
+        TRUNCATE TABLE dasom_new_member;
+
+        INSERT INTO dasom_new_member(ac_student_no, unique_code)
+        SELECT ac_student_no,
+               CONCAT(RIGHT(ac_student_no, 4), RIGHT(ac_contact, 4)) AS unique_code
+        FROM dasom_applicant
+        WHERE rec_no = #{recNo} AND is_accepted = true;
+    </insert>
+
 </mapper>

@@ -9,9 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Project {
     private int projectNo;
-    private int writerNo;
-    private int organizerNo;
-    private String ProjectTitle;
+    private String projectTitle;
     private String projectContent;
     private String thumbnailPic;
     private String projectPic;

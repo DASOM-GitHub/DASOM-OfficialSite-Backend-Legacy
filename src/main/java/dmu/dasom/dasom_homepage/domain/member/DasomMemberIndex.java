@@ -13,4 +13,5 @@ public class DasomMemberIndex {
     private String memName;
     private int memRecNo;
     private String memRole;
+    private String memProfilePic;
 }

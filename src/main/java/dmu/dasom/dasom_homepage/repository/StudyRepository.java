@@ -38,10 +38,6 @@ public interface StudyRepository {
     //해당 부원의 존재를 확인하기 위한 부원 반환
     Boolean isParticipant(@Param("studyNo")int studyNo, @Param("participantNo")int participantNo);
 
-    //---------category | role ----------
-    Category getCategoryByName(String categoryName);
-    Role getRoleByName(String role_name);
-
 
     List<StudyProgress> getStudyProgresses(int studyNo);
 

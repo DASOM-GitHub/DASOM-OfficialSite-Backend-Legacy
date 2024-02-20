@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/board/study")
 public class StudyController {
-    private StudyService studyService;
+    private final StudyService studyService;
 
     @Autowired
     public StudyController(StudyService studyService){
@@ -23,10 +23,13 @@ public class StudyController {
     }
 
     //수정하기
-    @PutMapping()
-    public ResponseEntity<ApiResponse<Void>> edit(@ModelAttribute Study study, @RequestPart(value = "studyFile") MultipartFile studyFile) throws IOException {
-        studyService.editStudy(study, studyFile);
-        // 추후 ioException 수정 필요 -> handler추가 필요
+    @PutMapping("/{studyNo}")
+    public ResponseEntity<ApiResponse<Void>> edit(@PathVariable("studyNo") int studyNo,
+                                                  @RequestPart Study study,
+                                                  @RequestPart(required = false) MultipartFile thumbnailFile,
+                                                  @RequestPart(required = false) MultipartFile studyFile) throws IOException {
+        studyService.editStudy(studyNo, study, thumbnailFile, studyFile);
+        // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
@@ -46,11 +49,12 @@ public class StudyController {
 
     @PostMapping()
     // study 추가 생성
-    public ResponseEntity<ApiResponse<Void>> create(@ModelAttribute Study study, @RequestParam(value = "studyFile") List<MultipartFile> studyFiles) throws IOException {
-        studyService.createStudy(study, studyFiles);
+    public ResponseEntity<ApiResponse<Void>> create(@RequestPart Study study,
+                                                    @RequestPart(required = false) MultipartFile thumbnailFile,
+                                                    @RequestPart(required = false) MultipartFile studyFile) throws IOException {
+        studyService.createStudy(study, thumbnailFile, studyFile);
         // 추후 ioException 수정 필요
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
 
