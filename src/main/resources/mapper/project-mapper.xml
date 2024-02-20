@@ -34,7 +34,7 @@
     </select>
 
     <select id="isProjectExistById" parameterType="int" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM project_table WHERE project_no = #{project_no});
+        SELECT EXISTS(SELECT 1 FROM project_table WHERE project_no = #{project_no});
     </select>
 
     <!--  참가자 부분          -->
@@ -56,7 +56,7 @@
     </insert>
 
     <select id="isParticipant" resultType="boolean">
-        SELECT EXISTS(SELECT *
+        SELECT EXISTS(SELECT 1
                       FROM project_participants
                       WHERE project_no = #{projectNo}
                         and participant_no = #{participantNo});
