@@ -16,6 +16,7 @@
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomMember" alias="DasomMember"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.DasomMemberIndex" alias="DasomMemberIndex"/>
         <typeAlias type="dmu.dasom.dasom_homepage.domain.member.MyPageDTO" alias="MyPageDTO"/>
+        <typeAlias type="dmu.dasom.dasom_homepage.domain.member.SignupDTO" alias="SignupDTO"/>
 
         <typeAlias type="dmu.dasom.dasom_homepage.domain.admin.MemberState" alias="MemberState"/>
 

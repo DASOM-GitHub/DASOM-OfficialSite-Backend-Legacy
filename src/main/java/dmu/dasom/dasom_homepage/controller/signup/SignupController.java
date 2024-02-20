@@ -1,6 +1,6 @@
 package dmu.dasom.dasom_homepage.controller.signup;
 
-import dmu.dasom.dasom_homepage.domain.member.DasomMember;
+import dmu.dasom.dasom_homepage.domain.member.SignupDTO;
 import dmu.dasom.dasom_homepage.restful.ApiResponse;
 import dmu.dasom.dasom_homepage.service.signup.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,13 @@ public class SignupController {
     @PostMapping("/verify")
     public ResponseEntity<ApiResponse<Void>> verifyNewMember(@RequestBody Map<String, String> reqBody) {
         signupService.verifyNewMember(reqBody.get("uniqueCode"));
-        return ResponseEntity.status(HttpStatus.FOUND).body(new ApiResponse<>(true));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
 
     // 회원 가입 프로세스
-    @PostMapping("/{uniqueCode}")
-    public ResponseEntity<ApiResponse<Void>> signupProc(@RequestBody DasomMember newMember, @PathVariable String uniqueCode) {
-        signupService.saveNewMember(newMember, uniqueCode);
+    @PostMapping("")
+    public ResponseEntity<ApiResponse<Void>> signupProc(@RequestBody SignupDTO newMember) {
+        signupService.saveNewMember(newMember);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 

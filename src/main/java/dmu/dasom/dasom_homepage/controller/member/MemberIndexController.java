@@ -24,7 +24,7 @@ public class MemberIndexController {
 
     @GetMapping()
     public ResponseEntity<ApiResponse<List<DasomMemberIndex>>> getMemberIndexList() {
-        return ResponseEntity.status(HttpStatus.FOUND).body(new ApiResponse<>(true, memberIndexService.getMemberIndexList()));
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, memberIndexService.getMemberIndexList()));
     }
 
 }
