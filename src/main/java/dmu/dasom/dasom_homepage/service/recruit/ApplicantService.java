@@ -66,6 +66,14 @@ public class ApplicantService {
             throw new DataNotFoundException();
         }
     }
+    //지원자 합격/불합격 업데이트
+    public void updateApplicantIsAccepted(int recNo, int acStudentNo, DasomApplicantUpdate dasomApplicant){
+        if(isApplicantValid(recNo,acStudentNo)){
+            recruitRepository.updateApplicatnIsAccepted(acStudentNo,dasomApplicant);
+        }else{
+            throw new DataNotFoundException();
+        }
+    }
 
     // 지원자 정보 삭제 메소드
     public void deleteApplicant(int recNo, int acStudentNo) {

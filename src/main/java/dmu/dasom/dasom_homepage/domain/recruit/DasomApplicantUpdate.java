@@ -1,8 +1,10 @@
 package dmu.dasom.dasom_homepage.domain.recruit;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -20,4 +22,5 @@ public class DasomApplicantUpdate {
     private String reasonForApply;
     private int recNo;
     private String applyDate;
+    private Boolean isAccepted;
 }
