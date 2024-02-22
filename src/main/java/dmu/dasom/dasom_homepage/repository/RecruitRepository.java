@@ -29,7 +29,7 @@ public interface RecruitRepository {
     DasomApplicant getApplicantByStudentNo(int recNo, int acStudentNo);
 
     void updateApplicantInfo(DasomApplicantUpdate dasomApplicant);
-    void updateApplicatnIsAccepted(int acStudentNo, DasomApplicantUpdate dasomApplicant);
+    void updateApplicatnIsAccepted(DasomApplicantUpdate dasomApplicant);
     void deleteApplicantByStudentNo(int recNo, int acStudentNo);
 
     Boolean isApplicantExistByRecNoAndStudentNo(int recNo, int acStudentNo);
