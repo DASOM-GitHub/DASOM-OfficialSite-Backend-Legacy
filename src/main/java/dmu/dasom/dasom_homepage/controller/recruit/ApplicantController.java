@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -60,7 +61,12 @@ public class ApplicantController {
         applicantService.updateApplicantInfo(recNo, acStudentNo, dasomApplicant);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
-
+    //지원자 합격/불합격 업데이트 (RequestParam)
+    @PatchMapping("/{recNo}/applicants/{acStudentNo}")
+    public ResponseEntity<ApiResponse<Void>> updateApplicantIsAccepted(@PathVariable int recNo,@PathVariable int acStudentNo, @RequestBody DasomApplicantUpdate dasomApplicant){
+        applicantService.updateApplicantIsAccepted(recNo, acStudentNo, dasomApplicant);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
+    }
 
     /* DELETE */
     // 지원자 정보 삭제하기

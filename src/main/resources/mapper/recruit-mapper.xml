@@ -56,6 +56,11 @@
                                    ac_grade = #{acGrade}, reason_for_apply = #{reasonForApply}, rec_no = #{recNo}
         WHERE rec_no = #{originRecNo} AND ac_student_no = #{originAcStudentNo}
     </update>
+    <update id="updateApplicatnIsAccepted" parameterType="DasomApplicantUpdate">
+        UPDATE dasom_applicant
+        SET is_accepted = #{isAccepted}
+        WHERE ac_student_no = #{acStudentNo}
+    </update>
 
     <delete id="deleteApplicantByStudentNo" parameterType="int">
         DELETE FROM dasom_applicant WHERE rec_no = #{recNo} AND ac_student_no = #{acStudentNo}

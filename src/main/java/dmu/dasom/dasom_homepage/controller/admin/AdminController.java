@@ -48,8 +48,8 @@ public class AdminController {
     }
 
     //회원 이름 검색 리스트
-    @GetMapping("/{memName}")
-    public ResponseEntity<ApiResponse<List<MemberState>>> searchMember(@PathVariable String memName) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,adminService.searchMember(memName)));
+    @GetMapping("/{memNo}")
+    public ResponseEntity<ApiResponse<List<MemberState>>> searchMember(@PathVariable String memNo) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,adminService.searchMember(memNo)));
     }
 }

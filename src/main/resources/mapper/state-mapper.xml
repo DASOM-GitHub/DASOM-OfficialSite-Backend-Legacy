@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dmu.dasom.dasom_homepage.repository.AdminRepository">
 
+    <select id="existByMemNo" parameterType="int" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM member_table WHERE mem_no = #{memNo})
+    </select>
     <delete id="deleteMember" parameterType="int">
         DELETE FROM member_table where mem_no = #{memNo}
     </delete>
@@ -15,7 +18,9 @@
     </update>
 
     <update id="stateChange" parameterType="MemberState">
-        UPDATE member_table set mem_state = #{memState}, state_update = CURRENT_TIMESTAMP where mem_no = #{memNo}
+        UPDATE member_table
+        SET mem_state = #{memState}, state_update = CURRENT_TIMESTAMP
+        WHERE mem_no = #{memNo}
     </update>
 
     <select id="getMemberListAll" resultType="MemberState">
