@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/members")
@@ -48,8 +49,8 @@ public class AdminController {
     }
 
     //회원 이름 검색 리스트
-    @GetMapping("/{memNo}")
-    public ResponseEntity<ApiResponse<List<MemberState>>> searchMember(@PathVariable String memNo) {
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true,adminService.searchMember(memNo)));
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<MemberState>>> searchMember(@RequestBody Map<String, String> keyword) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, adminService.searchMember(keyword.get("keyword"))));
     }
 }

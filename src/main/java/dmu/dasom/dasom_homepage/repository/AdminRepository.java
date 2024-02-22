@@ -17,6 +17,6 @@ public interface AdminRepository {
 
     void stateChange(MemberState memberState);
     List<MemberState> getMemberListAll();
-    List<MemberState> getMemberList(String memName);
+    List<MemberState> searchMembersByKeyword(String keyword);
 
 }

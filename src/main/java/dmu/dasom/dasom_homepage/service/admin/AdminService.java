@@ -38,8 +38,9 @@ public class AdminService {
     }
 
     // 회원 정보 수정 메소드
-    public void modify(int memNo,MemberState memberState)  {
+    public void modify(int memNo, MemberState memberState)  {
         if (adminRepository.existByMemNo(memNo)) {
+            memberState.setMemNo(memNo);
             adminRepository.modifyMember(memberState);
         } else {
             throw new DataNotFoundException();
@@ -57,13 +58,11 @@ public class AdminService {
     }
 
     // 회원 검색 결과 리스트 반환 메소드
-    public List<MemberState> searchMember(String memName){
-        List<MemberState> memList =adminRepository.getMemberList(memName);
-        if(memList.isEmpty()){
+    public List<MemberState> searchMember(String keyword){
+        List<MemberState> memList = adminRepository.searchMembersByKeyword(keyword);
+        if (memList.isEmpty())
             throw new DataNotFoundException();
-        }else{
-            return memList;
-        }
+        return memList;
     }
 
 }

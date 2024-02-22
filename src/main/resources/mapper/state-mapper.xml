@@ -5,6 +5,7 @@
     <select id="existByMemNo" parameterType="int" resultType="boolean">
         SELECT EXISTS(SELECT 1 FROM member_table WHERE mem_no = #{memNo})
     </select>
+
     <delete id="deleteMember" parameterType="int">
         DELETE FROM member_table where mem_no = #{memNo}
     </delete>
@@ -24,10 +25,12 @@
     </update>
 
     <select id="getMemberListAll" resultType="MemberState">
-        SELECT mem_no, mem_name, mem_state FROM  member_table;
+        SELECT mem_no, mem_name, mem_grade, mem_state, mem_department, leave_date, state_update FROM  member_table;
     </select>
 
-    <select id="getMemberList" resultType="MemberState">
-        SELECT mem_no, mem_name, mem_state FROM member_table WHERE mem_no = #{memNo};
+    <select id="searchMembersByKeyword" parameterType="String" resultType="MemberState">
+        SELECT mem_no, mem_name, mem_grade, mem_state, mem_department, leave_date, state_update
+        FROM member_table
+        WHERE mem_name LIKE CONCAT('%', #{keyword}, '%')
     </select>
 </mapper>
