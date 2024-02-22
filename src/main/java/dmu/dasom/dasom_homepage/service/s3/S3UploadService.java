@@ -5,16 +5,12 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,15 +26,8 @@ public class S3UploadService {
         // 첨부파일(이미지가 없을 경우)
         if(noticeFile == null) return "";
 
-        String originalFileName = noticeFile.getOriginalFilename();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-
-        Date now = new Date();
-
-        String time = sdf.format(now);
-
-        String fileName = time + "_" + originalFileName;
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid.toString();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(noticeFile.getSize());
@@ -53,17 +42,15 @@ public class S3UploadService {
         // 첨부파일(이미지가 없을 경우)
         if (fileName == null || fileName.equals("")) return;
 
-        int index = fileName.indexOf("20");
-
+        int index = fileName.indexOf(".com/");
         String file = fileName;
 
         if (index != -1) {
-            file = fileName.substring(index);
+            file = fileName.substring(index + 5);
         }
-        System.out.println(file);
         DeleteObjectRequest request = new DeleteObjectRequest(bucket, file);
         amazonS3.deleteObject(request);
-    }
 
+    }
 
 }
