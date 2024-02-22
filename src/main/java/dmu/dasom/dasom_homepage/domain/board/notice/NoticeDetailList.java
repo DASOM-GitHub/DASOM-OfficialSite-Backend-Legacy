@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class NoticeDetailList {
+    private int noticeNo;
     private String noticeTitle;
     private String memName;
     private String noticeContent;

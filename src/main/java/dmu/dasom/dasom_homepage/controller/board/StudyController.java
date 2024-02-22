@@ -25,10 +25,8 @@ public class StudyController {
     //수정하기
     @PutMapping("/{studyNo}")
     public ResponseEntity<ApiResponse<Void>> edit(@PathVariable("studyNo") int studyNo,
-                                                  @RequestPart Study study,
-                                                  @RequestPart(required = false) MultipartFile thumbnailFile,
-                                                  @RequestPart(required = false) MultipartFile studyFile) throws IOException {
-        studyService.editStudy(studyNo, study, thumbnailFile, studyFile);
+                                                  @RequestBody Study study) throws IOException {
+        studyService.editStudy(studyNo, study);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
@@ -49,14 +47,19 @@ public class StudyController {
 
     @PostMapping()
     // study 추가 생성
-    public ResponseEntity<ApiResponse<Void>> create(@RequestPart Study study,
-                                                    @RequestPart(required = false) MultipartFile thumbnailFile,
-                                                    @RequestPart(required = false) MultipartFile studyFile) throws IOException {
-        studyService.createStudy(study, thumbnailFile, studyFile);
+    public ResponseEntity<ApiResponse<Void>> create(@RequestBody Study study) throws IOException {
+        studyService.createStudy(study);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
+    @PatchMapping("/{studyNo}")
+    public ResponseEntity<ApiResponse<Void>> editAttachedPics(@PathVariable("studyNo") int studyNo,
+                                                              @RequestPart(required = false) MultipartFile thumbnailFile,
+                                                              @RequestPart(required = false) MultipartFile studyFile) throws IOException {
+        studyService.editAttachedPics(studyNo, thumbnailFile, studyFile);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
+    }
 
     @DeleteMapping("/{studyNo}")
     //admin 유저가 삭제

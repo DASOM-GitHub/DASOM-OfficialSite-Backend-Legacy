@@ -11,6 +11,8 @@ public class Project {
     private int projectNo;
     private String projectTitle;
     private String projectContent;
+    private String gitUrl;
+    private String notionUrl;
     private String thumbnailPic;
     private String projectPic;
     private String startDate;

@@ -21,6 +21,7 @@ public interface NoticeRepository{
     void createNotice(NoticeTable noticeTable);
     // notice 수정
     void updateNotice(NoticeTable noticeTable);
+    void updateNoticePic(NoticeDetailList noticeDetail);
     NoticeTable isExistsNotice(String strNoticeNo);
     // notice 삭제
     boolean deleteNotice(int noticeNo);

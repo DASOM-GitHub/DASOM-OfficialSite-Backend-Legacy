@@ -25,6 +25,8 @@ public interface ProjectRepository {
     // 수정 : update
     void editProject(Project project);
 
+    void editAttachedPics(Project project);
+
     // 삭제 : delete
     void removeProject(int project_no);
 

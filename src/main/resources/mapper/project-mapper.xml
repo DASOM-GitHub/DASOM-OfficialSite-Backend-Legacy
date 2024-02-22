@@ -7,21 +7,28 @@
     </select>
 
     <insert id="createProject" parameterType="Project">
-        INSERT INTO project_table(project_title, project_content, thumbnail_pic, project_pic, start_date, end_date)
-        VALUES(#{projectTitle}, #{projectContent}, #{thumbnailPic}, #{projectPic}, #{startDate}, #{endDate})
+        INSERT INTO project_table(project_title, project_content, git_url, notion_url, start_date, end_date)
+        VALUES(#{projectTitle}, #{projectContent}, #{gitUrl}, #{notionUrl}, #{startDate}, #{endDate})
     </insert>
 
     <update id="editProject" parameterType="Project">
         UPDATE project_table
         SET project_title = #{projectTitle},
             project_content = #{projectContent},
-            thumbnail_pic = #{thumbnailPic},
-            project_pic = #{projectPic},
+            git_url = #{gitUrl},
+            notion_url = #{notionUrl},
             start_date = #{startDate},
             end_date = #{endDate}
         WHERE project_no = #{projectNo}
     </update>
 
+    <update id="editAttachedPics" parameterType="Project">
+        UPDATE project_table
+        SET thumbnail_pic = #{thumbnailPic},
+            project_pic   = #{projectPic}
+        WHERE project_no = #{projectNo}
+    </update>
+    
     <delete id="removeProject" parameterType="int">
         DELETE FROM project_table
         WHERE project_no = #{project_no}

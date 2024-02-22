@@ -4,24 +4,28 @@ import dmu.dasom.dasom_homepage.domain.board.notice.NoticeDetailList;
 import dmu.dasom.dasom_homepage.domain.board.notice.NoticeList;
 import dmu.dasom.dasom_homepage.domain.board.notice.NoticeTable;
 import dmu.dasom.dasom_homepage.exception.DataNotFoundException;
-import dmu.dasom.dasom_homepage.exception.InsertConflictException;
+import dmu.dasom.dasom_homepage.repository.MemberRepository;
 import dmu.dasom.dasom_homepage.repository.NoticeRepository;
 import dmu.dasom.dasom_homepage.service.s3.S3UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class NoticeService {
     private final NoticeRepository noticeRepository;
+    private final MemberRepository memberRepository;
     private final S3UploadService s3UploadService;
 
     @Autowired
-    public NoticeService(NoticeRepository noticeRepository, S3UploadService s3UploadService) {
+    public NoticeService(NoticeRepository noticeRepository, MemberRepository memberRepository, S3UploadService s3UploadService) {
         this.noticeRepository = noticeRepository;
+        this.memberRepository = memberRepository;
         this.s3UploadService = s3UploadService;
     }
 
@@ -47,37 +51,31 @@ public class NoticeService {
     }
 
     // notice 등록
-    public void createNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception {
-        if(isExistsNotice(noticeTable.getNoticeNo()))
-            throw new InsertConflictException();
-
-        String fileName = s3UploadService.saveFile(noticeFile);
-
-        noticeTable.setNoticePic(fileName);
-
+    public void createNotice(NoticeTable noticeTable) {
+        noticeTable.setWriterNo(memberRepository.getMemberByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).getMemNo());
         noticeRepository.createNotice(noticeTable);
     }
 
 
     // notice 수정
-    public void updateNotice(NoticeTable noticeTable, MultipartFile noticeFile) throws Exception{
-        if(!isExistsNotice(noticeTable.getNoticeNo()))
+    public void updateNotice(NoticeTable noticeTable) {
+        if (!isExistsNotice(noticeTable.getNoticeNo()))
             throw new DataNotFoundException();
-
-        NoticeDetailList noticeList = noticeRepository.detailNoticePage(noticeTable.getNoticeNo());
-
-        String noticePic = noticeList.getNoticePic();
-
-        s3UploadService.deleteFile(noticePic);
-
-        String fileName = s3UploadService.saveFile(noticeFile);
-
-        noticeTable.setNoticePic(fileName);
-
         noticeRepository.updateNotice(noticeTable);
-
     }
 
+    // notice 사진 업데이트
+    public void updateNoticePic(int noticeNo, MultipartFile noticeFile) throws IOException {
+        NoticeDetailList notice = detailNoticePage(noticeNo);
+        notice.setNoticeNo(noticeNo);
+        s3UploadService.deleteFile(notice.getNoticePic());
+        if (noticeFile != null)
+            notice.setNoticePic(s3UploadService.saveFile(noticeFile));
+        else
+            notice.setNoticePic(null);
+
+        noticeRepository.updateNoticePic(notice);
+    }
 
     // notice 삭제
     public void deleteNotice(int noticeNo){

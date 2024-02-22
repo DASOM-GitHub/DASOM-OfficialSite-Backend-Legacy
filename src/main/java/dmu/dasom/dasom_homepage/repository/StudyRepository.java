@@ -25,6 +25,8 @@ public interface StudyRepository {
     // 수정 : update
     void editStudy(Study study);
 
+    void editAttachedPics(Study study);
+
     // 삭제 : delete
     void removeStudy(int project_no);
 

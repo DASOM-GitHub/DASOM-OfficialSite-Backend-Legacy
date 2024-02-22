@@ -44,37 +44,33 @@ public class StudyService {
     }
 
     // admin 접근 : create new Study | edit study
-    public void createStudy(Study study, MultipartFile thumbnailFile, MultipartFile studyFile) throws IOException {
-        if (thumbnailFile != null) {
-            String fileUrl = s3UploadService.saveFile(thumbnailFile);
-            study.setThumbnailPic(fileUrl);
-        }
-        if (studyFile != null) {
-            String fileUrl = s3UploadService.saveFile(studyFile);
-            study.setStudyPic(fileUrl);
-        }
+    public void createStudy(Study study) {
         studyRepository.createStudy(study);
     }
 
     //admin유저 접근 : 수정 : update
-    public void editStudy(int studyNo, Study studyUpdate, MultipartFile thumbnailFile, MultipartFile studyFile) throws IOException{
+    public void editStudy(int studyNo, Study studyUpdate) {
         studyUpdate.setStudyNo(studyNo);
         if (!isStudyExistById(studyNo))
             //수정할 study를 찾을수 없음
             throw new DataNotFoundException();
-
-        Study originStudy = studyRepository.findStudyById(studyNo);
-        if (thumbnailFile != null) {
-            s3UploadService.deleteFile(originStudy.getThumbnailPic());
-            String fileUrl = s3UploadService.saveFile(thumbnailFile);
-            studyUpdate.setThumbnailPic(fileUrl);
-        }
-        if (studyFile != null) {
-            s3UploadService.deleteFile(originStudy.getStudyPic());
-            String fileUrl = s3UploadService.saveFile(studyFile);
-            studyUpdate.setStudyPic(fileUrl);
-        }
         studyRepository.editStudy(studyUpdate);
+    }
+
+    // 첨부파일(사진) 업데이트
+    public void editAttachedPics(int studyNo, MultipartFile thumbnailFile, MultipartFile studyFile) throws IOException {
+        Study study = studyRepository.findStudyById(studyNo);
+        s3UploadService.deleteFile(study.getThumbnailPic());
+        s3UploadService.deleteFile(study.getStudyPic());
+
+        if (thumbnailFile != null)
+            study.setThumbnailPic(s3UploadService.saveFile(thumbnailFile));
+        else study.setThumbnailPic(null);
+        if (studyFile != null)
+            study.setStudyPic(s3UploadService.saveFile(studyFile));
+        else study.setStudyPic(null);
+
+        studyRepository.editAttachedPics(study);
     }
 
     //admin유저 접근 : 삭제 : delete study

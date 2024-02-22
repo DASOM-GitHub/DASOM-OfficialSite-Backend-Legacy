@@ -46,37 +46,33 @@ public class ProjectService {
     }
 
     // admin 접근 : create new Project | edit project
-    public void createProject(Project project, MultipartFile thumbnailFile, MultipartFile projectFile) throws IOException {
-        if (thumbnailFile != null) {
-            String fileUrl = s3UploadService.saveFile(thumbnailFile);
-            project.setThumbnailPic(fileUrl);
-        }
-        if (projectFile != null) {
-            String fileUrl = s3UploadService.saveFile(projectFile);
-            project.setProjectPic(fileUrl);
-        }
+    public void createProject(Project project) {
         projectRepository.createProject(project);
     }
 
     //admin유저 접근 : 수정 : update
-    public void editProject(int projectNo, Project projectUpdate, MultipartFile thumbnailFile, MultipartFile projectFile) throws IOException{
+    public void editProject(int projectNo, Project projectUpdate) throws IOException{
         projectUpdate.setProjectNo(projectNo);
         if (!isProjectExistById(projectNo))
             //수정할 project를 찾을수 없음
             throw new DataNotFoundException();
-
-        Project originProject = projectRepository.findProjectById(projectNo);
-        if (thumbnailFile != null) {
-            s3UploadService.deleteFile(originProject.getThumbnailPic());
-            String fileUrl = s3UploadService.saveFile(thumbnailFile);
-            projectUpdate.setThumbnailPic(fileUrl);
-        }
-        if (projectFile != null) {
-            s3UploadService.deleteFile(originProject.getProjectPic());
-            String fileUrl = s3UploadService.saveFile(projectFile);
-            projectUpdate.setProjectPic(fileUrl);
-        }
         projectRepository.editProject(projectUpdate);
+    }
+
+    // 첨부파일(사진) 업데이트
+    public void editAttachedPics(int projectNo, MultipartFile thumbnailFile, MultipartFile projectFile) throws IOException {
+        Project project = projectRepository.findProjectById(projectNo);
+        s3UploadService.deleteFile(project.getThumbnailPic());
+        s3UploadService.deleteFile(project.getProjectPic());
+
+        if (thumbnailFile != null)
+            project.setThumbnailPic(s3UploadService.saveFile(thumbnailFile));
+        else project.setThumbnailPic(null);
+        if (projectFile != null)
+            project.setProjectPic(s3UploadService.saveFile(projectFile));
+        else project.setProjectPic(null);
+
+        projectRepository.editAttachedPics(project);
     }
 
     //admin유저 접근 : 삭제 : delete project

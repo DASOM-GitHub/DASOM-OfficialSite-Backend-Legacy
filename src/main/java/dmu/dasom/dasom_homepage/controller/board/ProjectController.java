@@ -27,10 +27,8 @@ public class ProjectController {
     //수정하기
     @PutMapping("/{projectNo}")
     public ResponseEntity<ApiResponse<Void>> edit(@PathVariable("projectNo") int projectNo,
-                                                  @RequestPart Project project,
-                                                  @RequestPart(required = false) MultipartFile thumbnailFile,
-                                                  @RequestPart(required = false) MultipartFile projectFile) throws IOException {
-        projectService.editProject(projectNo, project, thumbnailFile, projectFile);
+                                                  @RequestBody Project project) throws IOException {
+        projectService.editProject(projectNo, project);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
     }
@@ -51,14 +49,19 @@ public class ProjectController {
 
     @PostMapping()
     // project 추가 생성
-    public ResponseEntity<ApiResponse<Void>> create(@RequestPart Project project,
-                                                    @RequestPart(required = false) MultipartFile thumbnailFile,
-                                                    @RequestPart(required = false) MultipartFile projectFile) throws IOException {
-        projectService.createProject(project, thumbnailFile, projectFile);
+    public ResponseEntity<ApiResponse<Void>> create(@RequestBody Project project) {
+        projectService.createProject(project);
         // 추후 ioException 수정 필요
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true));
     }
 
+    @PatchMapping("/{projectNo}")
+    public ResponseEntity<ApiResponse<Void>> editAttachedPics(@PathVariable("projectNo") int projectNo,
+                                                              @RequestPart(required = false) MultipartFile thumbnailFile,
+                                                              @RequestPart(required = false) MultipartFile projectFile) throws IOException {
+        projectService.editAttachedPics(projectNo, thumbnailFile, projectFile);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true));
+    }
 
     @DeleteMapping("/{projectNo}")
     //admin 유저가 삭제

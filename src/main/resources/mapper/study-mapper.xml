@@ -7,8 +7,8 @@
     </select>
 
     <insert id="createStudy" parameterType="Study">
-        INSERT INTO study_table(study_title, study_content, references_url, notion_url, thumbnail_pic, study_pic, start_date, end_date)
-        VALUES(#{studyTitle}, #{studyContent}, #{referencesUrl}, #{notionUrl}, #{thumbnailPic}, #{studyPic}, #{startDate}, #{endDate})
+        INSERT INTO study_table(study_title, study_content, references_url, notion_url, start_date, end_date)
+        VALUES(#{studyTitle}, #{studyContent}, #{referencesUrl}, #{notionUrl}, #{startDate}, #{endDate})
     </insert>
 
     <update id="editStudy" parameterType="Study">
@@ -17,10 +17,15 @@
             study_content  = #{studyContent},
             references_url = #{referencesUrl},
             notion_url     = #{notionUrl},
-            thumbnail_pic  = #{thumbnailPic},
-            study_pic      = #{studyPic},
             start_date     = #{startDate},
             end_date       = #{endDate}
+        WHERE study_no = #{studyNo}
+    </update>
+
+    <update id="editAttachedPics" parameterType="Study">
+        UPDATE study_table
+        SET thumbnail_pic = #{thumbnailPic},
+            study_pic = #{studyPic}
         WHERE study_no = #{studyNo}
     </update>
 
