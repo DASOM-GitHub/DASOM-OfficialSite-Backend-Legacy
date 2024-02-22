@@ -36,7 +36,7 @@
     </select>
 
     <select id="isStudyExistById" parameterType="int" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM study_table WHERE study_no = #{study_no});
+        SELECT EXISTS(SELECT 1 FROM study_table WHERE study_no = #{study_no});
     </select>
 
     <!--  참가자 부분          -->
@@ -58,7 +58,7 @@
     </insert>
 
     <select id="isParticipant" resultType="boolean">
-        SELECT EXISTS(SELECT *
+        SELECT EXISTS(SELECT 1
         FROM study_participants
         WHERE study_no = #{studyNo}
         and participant_no = #{participantNo});
@@ -84,7 +84,7 @@
     </delete>
     
     <select id="isStudyProgressExists" parameterType="int" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM study_progress WHERE study_no = #{studyNo} AND study_week = #{studyWeek})
+        SELECT EXISTS(SELECT 1 FROM study_progress WHERE study_no = #{studyNo} AND study_week = #{studyWeek})
     </select>
     
 </mapper>

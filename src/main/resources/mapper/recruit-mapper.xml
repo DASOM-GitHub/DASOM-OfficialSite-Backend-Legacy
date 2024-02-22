@@ -32,7 +32,7 @@
 
 
     <select id="isRecruitScheduleExistByRecNo" parameterType="int" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM recruit_schedule WHERE rec_no = #{recNo}) AS result;
+        SELECT EXISTS(SELECT 1 FROM recruit_schedule WHERE rec_no = #{recNo}) AS result;
     </select>
     
     <!-- 지원자 관련 쿼리 -->
@@ -67,14 +67,15 @@
     </delete>
 
     <select id="isApplicantExistByRecNoAndStudentNo" parameterType="int" resultType="boolean">
-        SELECT EXISTS(SELECT * FROM dasom_applicant WHERE rec_no = #{recNo} AND ac_student_no = #{acStudentNo})
+        SELECT EXISTS(SELECT 1 FROM dasom_applicant WHERE rec_no = #{recNo} AND ac_student_no = #{acStudentNo})
     </select>
 
     <insert id="doAcceptProcess" parameterType="int">
         TRUNCATE TABLE dasom_new_member;
 
-        INSERT INTO dasom_new_member(ac_student_no, unique_code)
-        SELECT ac_student_no,
+        INSERT INTO dasom_new_member(rec_no, ac_student_no, unique_code)
+        SELECT rec_no,
+               ac_student_no,
                CONCAT(RIGHT(ac_student_no, 4), RIGHT(ac_contact, 4)) AS unique_code
         FROM dasom_applicant
         WHERE rec_no = #{recNo} AND is_accepted = true;
