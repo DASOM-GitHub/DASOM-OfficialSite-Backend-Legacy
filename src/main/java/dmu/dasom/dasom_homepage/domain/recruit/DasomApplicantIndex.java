@@ -13,4 +13,5 @@ public class DasomApplicantIndex {
     private String acName;
     private String acDepartment;
     private int acGrade;
+    private int isAccepted;
 }
