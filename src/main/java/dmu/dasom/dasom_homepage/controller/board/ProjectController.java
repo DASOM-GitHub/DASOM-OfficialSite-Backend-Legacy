@@ -8,6 +8,7 @@ import dmu.dasom.dasom_homepage.service.board.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/board/project")
+@PreAuthorize("hasRole('MANAGER')")
 public class ProjectController {
     private final ProjectService projectService;
 
@@ -34,12 +36,14 @@ public class ProjectController {
     }
 
     @GetMapping()
+    @PreAuthorize("isAuthenticated()")
     // 모든 유저가 /study에 접근시 study 내용 반환
     public ResponseEntity<ApiResponse<List<ProjectList>>> getStudies(){
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, projectService.getProjects()));
     }
 
     @GetMapping("/{projectNo}")
+    @PreAuthorize("isAuthenticated()")
     //상세페이지에 들어왔을떄 해당 페이지의 상세 페이지 반환
     public ResponseEntity<ApiResponse<Project>> getStudy(@PathVariable("projectNo") int projectNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
@@ -72,6 +76,7 @@ public class ProjectController {
 //-----------------------부원 부분-----------------------------
     //특정 project 부원등 불러오기
     @GetMapping("/{projectNo}/participants")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<ProjectParticipants>>> getParticipants(@PathVariable("projectNo") int projectNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 true,projectService.getParticipants(projectNo)

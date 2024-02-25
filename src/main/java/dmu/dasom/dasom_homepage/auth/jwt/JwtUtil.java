@@ -75,10 +75,13 @@ public class JwtUtil {
 
     // 클라이언트로부터 온 리프레시 토큰과 Redis 속 리프레시 토큰을 비교
     public boolean verifyRefreshToken(String refreshToken) {
+        if (isExpired(refreshToken))
+            return false;
+
         String refreshTokenRedis = Optional.ofNullable(stringRedisTemplate)
                 .map(template -> template.opsForValue().get("REFRESH_TOKEN_" + getUsername(refreshToken)))
                 .orElse(null);
-        return !isExpired(refreshToken) && refreshTokenRedis != null && refreshTokenRedis.equals(refreshToken);
+        return refreshTokenRedis != null && refreshTokenRedis.equals(refreshToken);
     }
 
     // 모든 검증이 끝나고 새로운 액세스 토큰과 리프레시 토큰을 발급하여 반환

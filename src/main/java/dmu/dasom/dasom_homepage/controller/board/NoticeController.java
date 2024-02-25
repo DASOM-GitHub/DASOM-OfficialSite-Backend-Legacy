@@ -8,6 +8,7 @@ import dmu.dasom.dasom_homepage.service.board.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/board/notice")
+@PreAuthorize("hasRole('MANAGER')")
 public class NoticeController {
     private final NoticeService noticeService;
 
@@ -26,17 +28,20 @@ public class NoticeController {
 
     // notice 전체 조회(목록)
     @GetMapping("")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<NoticeList>>> findNoticeAll() {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.findNoticeDateDesc()));
     }
 
     // notice 제목 기반 조회
     @PostMapping("/title")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<List<NoticeList>>> findNoticeTitle(@RequestBody Map<String, String> noticeTitle) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.findNoticeTitle(noticeTitle.get("noticeTitle"))));
     }
     // notice 상세 페이지
     @GetMapping("/{noticeNo}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ApiResponse<NoticeDetailList>> detailPage(@PathVariable("noticeNo") int noticeNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, noticeService.detailNoticePage(noticeNo)));
     }

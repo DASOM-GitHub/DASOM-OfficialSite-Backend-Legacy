@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/recruit")
-//@PreAuthorize("hasRole('MANAGER')") // MANAGER 권한 이상만 접근 가능
+@PreAuthorize("hasRole('MANAGER')") // MANAGER 권한 이상만 접근 가능
 public class ApplicantController {
     private final ApplicantService applicantService;
 
@@ -39,7 +39,7 @@ public class ApplicantController {
 
     /* POST */
     // 지원자 추가
-//    @PreAuthorize("permitAll()") // 신입 부원 지원 기능은 모두가 접근 가능
+    @PreAuthorize("permitAll()") // 신입 부원 지원 기능은 모두가 접근 가능
     @PostMapping("/{recNo}/applicants")
     public ResponseEntity<ApiResponse<Void>> saveNewApplicant(@PathVariable int recNo, @RequestBody DasomApplicant applicant) {
         applicantService.saveNewApplicant(recNo, applicant);
