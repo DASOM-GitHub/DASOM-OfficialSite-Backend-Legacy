@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'dmu.dasom'
-version = 'test'
+version = '1.0'
 
 java {
 	sourceCompatibility = '17'
