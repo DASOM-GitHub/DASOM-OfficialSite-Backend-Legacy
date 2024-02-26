@@ -82,8 +82,8 @@ public class SecurityConfig {
                                 CorsConfiguration configuration = new CorsConfiguration();
 
                                 // 프론트엔드 서버에서 오는 요청을 허용한다
-                                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-//                                configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+//                                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                                configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
                                 configuration.setAllowedMethods(Collections.singletonList("*"));
                                 configuration.setAllowCredentials(true);
                                 configuration.setAllowedHeaders(Collections.singletonList("*"));
