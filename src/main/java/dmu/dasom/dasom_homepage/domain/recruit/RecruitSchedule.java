@@ -8,10 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RecruitSchedule {
     private int recNo;
-    private String applyStart;
-    private String applyEnd;
-    private String firstAnnounce;
-    private String interviewStart;
-    private String interviewEnd;
-    private String secondAnnounce;
+    private String recName;
+    private String recDescription;
+    private String recStatus;
 }
