@@ -34,14 +34,14 @@ public class StudyController {
     }
 
     @GetMapping()
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     // 모든 유저가 /study에 접근시 study 내용 반환
     public ResponseEntity<ApiResponse<List<StudyList>>> getStudies(){
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, studyService.getStudys()));
     }
 
     @GetMapping("/{studyNo}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     //상세페이지에 들어왔을떄 해당 페이지의 상세 페이지 반환
     public ResponseEntity<ApiResponse<Study>> getStudy(@PathVariable("studyNo") int studyNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
@@ -74,7 +74,7 @@ public class StudyController {
     //-----------------------부원 부분-----------------------------
     //특정 study 부원등 불러오기
     @GetMapping("/{studyNo}/participants")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ApiResponse<List<StudyParticipants>>> getParticipants(@PathVariable("studyNo") int studyNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 true,studyService.getParticipants(studyNo)
@@ -100,7 +100,7 @@ public class StudyController {
 
     // 스터디 진행 사항 조회
     @GetMapping("/{studyNo}/progress")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ApiResponse<List<StudyProgress>>> getStudyProgresses(@PathVariable int studyNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, studyService.getStudyProgresses(studyNo)));
     }

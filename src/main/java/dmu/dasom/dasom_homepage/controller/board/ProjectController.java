@@ -36,14 +36,14 @@ public class ProjectController {
     }
 
     @GetMapping()
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     // 모든 유저가 /study에 접근시 study 내용 반환
     public ResponseEntity<ApiResponse<List<ProjectList>>> getStudies(){
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(true, projectService.getProjects()));
     }
 
     @GetMapping("/{projectNo}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     //상세페이지에 들어왔을떄 해당 페이지의 상세 페이지 반환
     public ResponseEntity<ApiResponse<Project>> getStudy(@PathVariable("projectNo") int projectNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
@@ -76,7 +76,7 @@ public class ProjectController {
 //-----------------------부원 부분-----------------------------
     //특정 project 부원등 불러오기
     @GetMapping("/{projectNo}/participants")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<ApiResponse<List<ProjectParticipants>>> getParticipants(@PathVariable("projectNo") int projectNo) {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 true,projectService.getParticipants(projectNo)
