@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.ProjectRepository">
+
+    <select id="getProjects" resultType="ProjectList">
+        SELECT project_no, project_title, project_content, thumbnail_pic FROM project_table
+    </select>
+
+    <insert id="createProject" parameterType="Project">
+        INSERT INTO project_table(project_title, project_content, git_url, notion_url, start_date, end_date)
+        VALUES(#{projectTitle}, #{projectContent}, #{gitUrl}, #{notionUrl}, #{startDate}, #{endDate})
+    </insert>
+
+    <update id="editProject" parameterType="Project">
+        UPDATE project_table
+        SET project_title = #{projectTitle},
+            project_content = #{projectContent},
+            git_url = #{gitUrl},
+            notion_url = #{notionUrl},
+            start_date = #{startDate},
+            end_date = #{endDate}
+        WHERE project_no = #{projectNo}
+    </update>
+
+    <update id="editAttachedPics" parameterType="Project">
+        UPDATE project_table
+        SET thumbnail_pic = #{thumbnailPic},
+            project_pic   = #{projectPic}
+        WHERE project_no = #{projectNo}
+    </update>
+    
+    <delete id="removeProject" parameterType="int">
+        DELETE FROM project_table
+        WHERE project_no = #{project_no}
+    </delete>
+
+    <select id="findProjectById" parameterType="int" resultType="Project">
+        select *
+        from project_table
+        where project_no = #{project_no};
+    </select>
+
+    <select id="isProjectExistById" parameterType="int" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM project_table WHERE project_no = #{project_no});
+    </select>
+
+    <!--  참가자 부분          -->
+
+    <select id="getParticipants" parameterType="int" resultType="ProjectParticipants">
+        SELECT *
+        FROM project_participants
+        WHERE project_no = #{projectNo}
+    </select>
+
+    <delete id="removeParticipant">
+        DELETE FROM project_participants
+        WHERE project_no = #{projectNo} and participant_no = #{participantNo}
+    </delete>
+
+    <insert id="addParticipant" parameterType="ProjectParticipants">
+        insert into project_participants
+        values (#{projectNo}, #{participantNo}, #{participantRole})
+    </insert>
+
+    <select id="isParticipant" resultType="boolean">
+        SELECT EXISTS(SELECT 1
+                      FROM project_participants
+                      WHERE project_no = #{projectNo}
+                        and participant_no = #{participantNo});
+    </select>
+
+</mapper>

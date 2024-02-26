@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.NoticeRepository">
+
+    <select id="findNoticeDateDesc" resultType="NoticeList">
+        SELECT n.notice_no, m.mem_name, n.notice_title, n.notice_register_date FROM notice_table n JOIN member_table m ON n.writer_no = m.mem_no ORDER BY n.notice_register_date DESC;
+    </select>
+
+    <select id="findNoticeTitle" resultType="NoticeList">
+        SELECT n.notice_no, m.mem_name, n.notice_title, n.notice_register_date FROM notice_table n JOIN member_table m ON n.writer_no = m.mem_no WHERE notice_title LIKE CONCAT('%', #{noticeTitle}, '%') ORDER BY notice_register_date DESC;
+    </select>
+
+    <select id="detailNoticePage" resultType="NoticeDetailList">
+        SELECT n.notice_no, n.notice_title, m.mem_name, n.notice_content, n.notice_pic FROM notice_table n JOIN member_table m ON n.writer_no = m.mem_no WHERE notice_no = #{noticeNo};
+    </select>
+
+    <insert id="createNotice" parameterType="NoticeTable">
+        INSERT INTO notice_table (writer_no, notice_title, notice_content)
+        VALUES (#{writerNo}, #{noticeTitle}, #{noticeContent})
+    </insert>
+
+    <update id="updateNotice" parameterType="NoticeTable">
+        update notice_table
+        set notice_title = #{noticeTitle}, notice_content = #{noticeContent}
+        where notice_no = #{noticeNo};
+    </update>
+
+    <update id="updateNoticePic" parameterType="NoticeDetailList">
+        UPDATE notice_table
+        SET notice_pic = #{noticePic}
+        WHERE notice_no = #{noticeNo}
+    </update>
+
+    <select id="isExistsNotice" parameterType="String" resultType="NoticeTable">
+        select *
+        from notice_table
+        where notice_no = #{noticeNo};
+    </select>
+
+    <delete id="deleteNotice" parameterType="int">
+        DELETE FROM notice_table WHERE notice_no = #{noticeNo}
+    </delete>
+</mapper>
