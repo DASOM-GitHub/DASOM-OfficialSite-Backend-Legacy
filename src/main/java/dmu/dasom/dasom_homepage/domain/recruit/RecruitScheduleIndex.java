@@ -6,12 +6,9 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
-public class RecruitPeriod {
+public class RecruitScheduleIndex {
     private int recNo;
     private String applyStart;
-    private String applyEnd;
     private String firstAnnounce;
-    private String interviewStart;
-    private String interviewEnd;
     private String secondAnnounce;
 }

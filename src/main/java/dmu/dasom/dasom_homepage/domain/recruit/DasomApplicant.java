@@ -9,13 +9,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DasomApplicant {
     private int acNo;
+    private int recNo;
     private int acStudentNo;
     private String acName;
     private String acContact;
     private String acEmail;
     private String acDepartment;
-    private String acGrade;
+    private int acGrade;
     private String reasonForApply;
-    private int recNo;
     private String applyDate;
+    private Boolean isAccepted;
 }

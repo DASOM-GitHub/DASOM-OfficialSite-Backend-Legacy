@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.SignupRepository">
+
+    <select id="isNewMemberExistByCode" parameterType="String" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM dasom_new_member WHERE unique_code = #{uniqueCode}) AS result
+    </select>
+
+    <select id="isNewMemberExistByStudentNo" parameterType="int" resultType="boolean">
+        SELECT EXISTS (SELECT 1
+                       FROM dasom_new_member
+                       WHERE rec_no = #{recNo}
+                         AND ac_student_no = #{studentNo}
+                         AND is_code_expired = '0') AS result;
+    </select>
+
+    <select id="isUniqueCodeExpired" parameterType="String" resultType="boolean">
+        SELECT is_code_expired FROM dasom_new_member WHERE unique_code = #{uniqueCode}
+    </select>
+
+    <select id="existByEmail" parameterType="String" resultType="boolean">
+        SELECT EXISTS (SELECT 1 FROM member_table WHERE mem_email = #{memEmail}) AS result
+    </select>
+
+    <insert id="saveNewMember" parameterType="SignupDTO">
+        INSERT INTO member_table (mem_email, mem_password, mem_name, mem_grade, mem_department, mem_rec_no)
+        VALUES (#{memEmail}, #{memPassword}, #{memName}, #{memGrade}, #{memDepartment}, #{memRecNo})
+    </insert>
+
+    <update id="expireUniqueCode" parameterType="int">
+        UPDATE dasom_new_member SET is_code_expired = '1' WHERE rec_no = #{recNo} AND ac_student_no = #{studentNo}
+    </update>
+
+</mapper>

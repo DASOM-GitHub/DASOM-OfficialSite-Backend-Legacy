@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dmu.dasom.dasom_homepage.repository.StudyRepository">
+
+    <select id="getStudys" resultType="StudyList">
+        SELECT study_no, study_title, study_content, thumbnail_pic FROM study_table
+    </select>
+
+    <insert id="createStudy" parameterType="Study">
+        INSERT INTO study_table(study_title, study_content, references_url, notion_url, start_date, end_date)
+        VALUES(#{studyTitle}, #{studyContent}, #{referencesUrl}, #{notionUrl}, #{startDate}, #{endDate})
+    </insert>
+
+    <update id="editStudy" parameterType="Study">
+        UPDATE study_table
+        SET study_title    = #{studyTitle},
+            study_content  = #{studyContent},
+            references_url = #{referencesUrl},
+            notion_url     = #{notionUrl},
+            start_date     = #{startDate},
+            end_date       = #{endDate}
+        WHERE study_no = #{studyNo}
+    </update>
+
+    <update id="editAttachedPics" parameterType="Study">
+        UPDATE study_table
+        SET thumbnail_pic = #{thumbnailPic},
+            study_pic = #{studyPic}
+        WHERE study_no = #{studyNo}
+    </update>
+
+    <delete id="removeStudy" parameterType="int">
+        DELETE FROM study_table
+        WHERE study_no = #{study_no}
+    </delete>
+
+    <select id="findStudyById" parameterType="int" resultType="Study">
+        select *
+        from study_table
+        where study_no = #{study_no};
+    </select>
+
+    <select id="isStudyExistById" parameterType="int" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM study_table WHERE study_no = #{study_no});
+    </select>
+
+    <!--  참가자 부분          -->
+
+    <select id="getParticipants" parameterType="int" resultType="StudyParticipants">
+        SELECT *
+        FROM study_participants
+        WHERE study_no = #{studyNo}
+    </select>
+
+    <delete id="removeParticipant">
+        DELETE FROM study_participants
+        WHERE study_no = #{studyNo} and participant_no = #{participantNo}
+    </delete>
+
+    <insert id="addParticipant" parameterType="StudyParticipants">
+        insert into study_participants
+        values (#{studyNo}, #{participantNo})
+    </insert>
+
+    <select id="isParticipant" resultType="boolean">
+        SELECT EXISTS(SELECT 1
+        FROM study_participants
+        WHERE study_no = #{studyNo}
+        and participant_no = #{participantNo});
+    </select>
+
+    
+    <select id="getStudyProgresses" parameterType="int" resultType="StudyProgress">
+        SELECT * FROM study_progress WHERE study_no = #{studyNo}
+    </select>
+    
+    <insert id="addStudyProgress" parameterType="StudyProgress">
+        INSERT INTO study_progress VALUES (#{studyNo}, #{studyWeek}, #{weekContent})
+    </insert>
+
+    <update id="editStudyProgress" parameterType="StudyProgressUpdate">
+        UPDATE study_progress
+        SET study_week = #{studyWeek}, week_content = #{weekContent}
+        WHERE study_no = #{originStudyNo} AND study_week = #{originStudyWeek}
+    </update>
+    
+    <delete id="deleteStudyProgress" parameterType="int">
+        DELETE FROM study_progress WHERE study_no = #{studyNo} AND study_week = #{studyWeek}
+    </delete>
+    
+    <select id="isStudyProgressExists" parameterType="int" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM study_progress WHERE study_no = #{studyNo} AND study_week = #{studyWeek})
+    </select>
+    
+</mapper>
