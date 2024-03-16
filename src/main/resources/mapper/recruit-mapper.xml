@@ -71,9 +71,7 @@
     </select>
 
     <insert id="doAcceptProcess" parameterType="int">
-        TRUNCATE TABLE dasom_new_member;
-
-        INSERT INTO dasom_new_member(rec_no, ac_student_no, unique_code)
+        INSERT IGNORE INTO dasom_new_member(rec_no, ac_student_no, unique_code)
         SELECT rec_no,
                ac_student_no,
                CONCAT(RIGHT(ac_student_no, 4), RIGHT(ac_contact, 4)) AS unique_code
